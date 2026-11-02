@@ -1,5 +1,6 @@
 ---
-title: "Distribución Normal"
+title: "Ejercicios realizados Distribución Normal"
+author: "Karen Beatriz Garcia Martinez"
 subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 format:
@@ -1392,11 +1393,8 @@ ggplot(data.frame(tiempo = tiempos_respuesta), aes(x = tiempo)) +
     # plot.background = element_rect(fill = "white", color = NA)
   )
 ```
-
 :::
-
 ## Ejercicios Propuestos
-
 
 ::: {#exr-altura}
 
@@ -1410,12 +1408,46 @@ Las alturas de estudiantes universitarios siguen una distribución normal con me
 4. ¿Cuál es la altura del estudiante en el percentil 25?
 5. Crea un histograma de la muestra con la densidad teórica superpuesta
 
+### Análisis de altura de estudiantes
 :::
+```{r ejercicio-altura}
+# Parámetros de la distribución
+media_poblacional <- 170
+desviacion_poblacional <- 8
+tamano_muestra <- 500
 
----
+# Fijar semilla para reproducibilidad
+set.seed(123)
+
+# Simular las alturas
+alturas <- rnorm(tamano_muestra,mean = media_poblacional,sd = desviacion_poblacional)
+
+# Estadísticos descriptivos
+media_muestral <- mean(alturas)
+mediana_muestral <- median(alturas)
+desviacion_muestral <- sd(alturas)
+
+# Porcentaje de estudiantes con altura mayor a 180 cm
+porcentaje_mayor_180 <- mean(alturas > 180) * 100
+
+# Percentil 25
+percentil_25 <- quantile(alturas, 0.25)
+
+# Mostrar resultados
+cat("Media muestral:", round(media_muestral, 2), "cm\n")
+cat("Mediana muestral:", round(mediana_muestral, 2), "cm\n")
+cat("Desviación estándar muestral:", round(desviacion_muestral, 2), "cm\n")
+cat("Porcentaje mayor a 180 cm:", round(porcentaje_mayor_180, 2), "%\n")
+cat("Percentil 25:", round(percentil_25, 2), "cm\n")
+
+#5 histograma
+hist(alturas,probability = TRUE,col = "yellow",border = "white",main = "Distribución de alturas de estudiantes",xlab = "Altura (cm)")
+
+curve(dnorm(x,mean = media_poblacional,sd = desviacion_poblacional),col = "red",lwd = 2,add = TRUE)
+```
 
 
-::: {#exr-temperatura}
+::: {#exrtemperatura}
 
 ### Control de Temperatura Industrial 
 
@@ -1428,9 +1460,41 @@ Un proceso industrial debe mantener la temperatura a 350°C ± 10°C. Las temper
 4. ¿Qué $\sigma$ se necesita para tener 99.9% de productos dentro de especificación?
 
 :::
+```{r ejercicio-temperatura}
+# Parámetros
+media <- 350
+desviacion <- 5
+n <- 1000
 
----
+# Límites de especificación
+limite_inferior <- 340
+limite_superior <- 360
 
+# Reproducibilidad
+set.seed(123)
+
+# 1. Simular un día de producción
+temperaturas <- rnorm(n = n,mean = media,sd = desviacion)
+#2. Porcentaje de especificación 
+fuera_especificacion <- mean(temperaturas < limite_inferior | temperaturas>limite_superior) * 100
+cat("Porcentaje fuera de especificación:",round(fuera_especificacion, 2),"%\n")
+#3.Cambio a 355 °C
+media_nueva <- 355
+
+temperaturas_nuevas <- rnorm(n = n,mean = media_nueva,sd = desviacion)
+fuera_especificacion_nueva <- mean(temperaturas_nuevas < limite_inferior | temperaturas_nuevas > limite_superior) * 100
+cat("Porcentaje fuera de especificación con media 355:",round(fuera_especificacion_nueva, 2),"%\n")
+#4 Sigma para lograr 99.9% dentro de la especificación
+z <- qnorm(0.9995)
+sigma_requerida <- 10 / z 
+cat("Sigma requerida para 99.9% dentro de especificación:",round(sigma_requerida, 3),"\n")
+#5 HISTOGRAMA
+hist(temperaturas,probability = TRUE,col = "pink",border = "white",main= "Temperaturas del proceso",xlab = "Temperatura (°C)")
+
+curve(dnorm(x,mean = media,sd = desviacion),add = TRUE,col = "red",lwd = 3)
+abline(v = limite_inferior,col = "purple",lwd = 2,lty = 2)
+abline(v = limite_superior, col="blue", lwd=2,lty=2)
+```
 
 ::: {#exr-ventas}
 
@@ -1447,8 +1511,36 @@ Las ventas mensuales de una tienda siguen $N(50000, 12000^2)$ pesos.
 5. Si la meta es superar 45,000 pesos, ¿qué porcentaje de meses se cumple?
 
 :::
+```{r ejercicio-ventas, echo=FALSE}
+#parametros
+media <- 50000
+desviacion <- 12000
+n <- 24
 
-
+# Simulación
+set.seed(123)
+ventas <- rnorm(n = n,mean = media,sd = desviacion)
+#1 venta de 24 meses
+ventas
+#2. Probabilidad de ventas mayores a $60,000 
+prob_mayor_60000 <- 1 - pnorm(60000,mean = media,sd = desviacion)
+cat("Probabilidad de ventas mayores a 60,000:",round(prob_mayor_60000,4),"\n")
+#3. meses con ventas menores a $30,000
+prob_menor_30000 <- pnorm(30000,mean = media,sd= desviacion)
+meses_esperados <- prob_menor_30000 * n
+cat("Meses esperados con ventas menores a 30,000:",round(meses_esperados,2),"\n")
+#4.Rango 
+Q1 <- quantile(ventas, 0.25)
+Q3 <- quantile(ventas, 0.75)
+RIC <- Q3 - Q1
+cat("Rango intercuartílico:",round(RIC,2),"\n")
+#5 %  de meses que superan la meta de $45,000
+porcentaje_meta <- mean(ventas > 45000) * 100
+cat("Porcentaje de meses que cumplen la meta:",round(porcentaje_meta,2),"%\n")
+#HISTOGRAAMA
+hist(ventas,probability = TRUE,col = "green",border = "white",main = "Distribución de ventas mensuales",xlab = "Ventas (pesos)")
+curve(dnorm(x,mean = media,sd = desviacion),add = TRUE,col = "red",lwd = 3)
+```
 
 
 ::: {#exr-baterias}
@@ -1465,7 +1557,34 @@ La duración de baterías sigue $N(1200, 150^2)$ horas.
 5. ¿Cuál es el percentil 10 de la distribución?
 
 :::
-
+```{r ejercicio-baterias, echo=FALSE}
+# Parámetros
+media <- 1200
+desviacion <- 150
+n <- 800
+# Simulación
+set.seed(123)
+baterias <- rnorm(n = n,mean = media,sd = desviacion)
+baterias
+#2 Garantia que cubre el 95% de las baterías
+garantia_95 <- qnorm(0.05,mean = media,sd = desviacion)
+cat("Garantía que cubre al 95% de las baterías:",round(garantia_95,2),"horas\n")
+#3 Cuantas fallaran antes de 900 horas entre 10,000 baterías
+prob_falla_900 <- pnorm(900,mean = media,sd = desviacion)
+fallas_esperadas <- prob_falla_900 * 10000
+cat("Baterías que fallarán antes de 900 horas:",round(fallas_esperadas))
+#4 comparar media y mediana
+media_muestral <- mean(baterias)
+mediana_muestral <- median(baterias)
+cat("\nMedia muestral:",round(media_muestral,2),"\n")
+cat("Mediana muestral:",round(mediana_muestral,2),"\n")
+#5 percentil 10
+percentil10 <- qnorm(0.10,mean = media,sd = desviacion)
+cat("Percentil 10:",round(percentil10,2),"horas\n")
+#HISTOGRAMA
+hist(baterias,probability = TRUE,col = "orange",border = "white",main = "Tiempo de vida de baterías",xlab = "Horas")
+curve(dnorm(x, mean = media, sd = desviacion), add = TRUE,col = "red",lwd= 3)
+```
 ---
 
 ::: {#exr-errores_medicion}
@@ -1483,8 +1602,30 @@ Los errores de un instrumento de medición siguen $N(0, 2.5^5)$ unidades.
 5. Verifica que la distribución es simétrica alrededor de 0
 
 :::
-
-
+```{r ejercicio- medicion}
+# Análisis de errores de medición
+set.seed(123)
+# 1. Simulación
+errores <- rnorm(1000, mean = 0, sd = 2.5)
+# 2. Porcentaje entre -5 y 5
+porcentaje_5 <- (pnorm(5, 0, 2.5) - pnorm(-5, 0, 2.5))*100
+# 3. P(|X| > 6)
+prob_abs6 <- 2*(1 - pnorm(6, 0, 2.5))
+# 4. Mediciones precisas (|error| <= 3)
+precisas <- (pnorm(3, 0, 2.5) -  pnorm(-3, 0, 2.5))*100
+# 5. Verificación de simetría
+cola_derecha <- 1 - pnorm(5, 0, 2.5)
+cola_izquierda <- pnorm(-5, 0, 2.5)
+# Resultados
+cat("Porcentaje entre -5 y 5 =", porcentaje_5, "%\n")
+cat("P(|X| > 6) =", prob_abs6, "\n")
+cat("Porcentaje de mediciones precisas =", precisas, "%\n")
+cat("P(X > 5) =", cola_derecha, "\n")
+cat("P(X < -5) =", cola_izquierda, "\n")
+#HISTOGRAMA
+hist(errores,probability = TRUE,col = "skyblue", main = "Errores de medición",xlab = "Error")
+curve(dnorm(x, 0, 2.5), add = TRUE, col = "red",lwd = 2)
+```
 ::: {#exr-examen_corporativo}
 
 ### Puntuaciones de Examen Comparativo 
@@ -1499,9 +1640,31 @@ Dos grupos toman el mismo examen. Grupo A: $N(75, 10^2)$, Grupo B: $N(82, 8^2)$.
 5. ¿A partir de qué puntuación está el 10% superior de cada grupo?
 
 :::
+```{r ejercicio-examen}
+# Puntuaciones de examen comparativo
+set.seed(123)
+# Simulación
+grupoA <- rnorm(200, mean = 75, sd = 10)
+grupoB <- rnorm(200, mean = 82, sd = 8)
+# 2. Porcentaje del Grupo A que supera la media de B
+porcentaje_A <- (1 - pnorm(82, 75, 10))*100
+# 3. P(B < 70)
+prob_B_70 <- pnorm(70, 82, 8)
+# 5. Percentil 90
+p90_A <- qnorm(0.90, 75, 10)
+p90_B <- qnorm(0.90, 82, 8)
+# Resultados
+cat("Grupo A > media de B:", porcentaje_A, "%\n")
+cat("P(B < 70):", prob_B_70, "\n")
+cat("Percentil 90 Grupo A:", p90_A, "\n")
+cat("Percentil 90 Grupo B:", p90_B, "\n")
+#comparación con histogramas
+hist(grupoA, probability = TRUE,col = rgb(1,0,0,0.4),xlim = c(30,120),main = "Comparación de puntuaciones", xlab = "Puntuación")
 
+hist(grupoB,probability = TRUE,col = rgb(0,0,1,0.4),add = TRUE)
 
-
+legend("topright",legend = c("Grupo A","Grupo B"),fill = c(rgb(1,0,0,0.4), rgb(0,0,1,0.4)))
+```
 
 # Teorema Central del Límite (TCL)
 
