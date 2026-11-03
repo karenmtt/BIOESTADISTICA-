@@ -1,5 +1,7 @@
 ---
-title: "Distribución Poisson"
+title: "Ejercicios resueltos Distribución Poisson"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -25,21 +27,21 @@ La distribución de Poisson es una de las distribuciones de probabilidad discret
 
 Esta distribución es especialmente útil para modelar el **número de eventos que ocurren en un intervalo fijo** de tiempo, espacio, volumen, o cualquier otra unidad de medida, cuando estos eventos:
 
--   Ocurren de manera **independiente**
--   Tienen una **tasa promedio constante**
--   Es **raro** que ocurran múltiples eventos simultáneamente
+- Ocurren de manera **independiente**
+- Tienen una **tasa promedio constante**
+- Es **raro** que ocurran múltiples eventos simultáneamente
 
 ### Aplicaciones Comunes
 
 La distribución de Poisson se utiliza frecuentemente para modelar:
 
--   **Llegadas de clientes** a un banco o restaurante por hora
--   **Llamadas telefónicas** recibidas en un centro de atención por minuto
--   **Defectos de fabricación** en un lote de productos
--   **Accidentes de tráfico** en una intersección por día
--   **Mutaciones genéticas** en una secuencia de ADN
--   **Partículas radioactivas** detectadas por un contador Geiger
--   **Terremotos** en una región geográfica por año
+- **Llegadas de clientes** a un banco o restaurante por hora
+- **Llamadas telefónicas** recibidas en un centro de atención por minuto
+- **Defectos de fabricación** en un lote de productos
+- **Accidentes de tráfico** en una intersección por día
+- **Mutaciones genéticas** en una secuencia de ADN
+- **Partículas radioactivas** detectadas por un contador Geiger
+- **Terremotos** en una región geográfica por año
 
 La distribución de Poisson también surge como **aproximación a la distribución binomial** cuando $n$ es grande y $p$ es pequeño, manteniendo $np$ constante.
 
@@ -52,9 +54,9 @@ $$f(x)= \frac{\lambda^x e^{-\lambda}}{x!}$$
 
 donde:
 
--   $x = 0, 1, 2, 3, \ldots$ (número entero no negativo de eventos)
--   $\lambda > 0$ (parámetro de tasa)
--   $e \approx 2.71828$ (base del logaritmo natural)
+- $x = 0, 1, 2, 3, \ldots$ (número entero no negativo de eventos)
+- $\lambda > 0$ (parámetro de tasa)
+- $e \approx 2.71828$ (base del logaritmo natural)
 
 A una variable aleatoria que sigue esta distribución se le denota como $X \sim \text{Poisson}(\lambda)$
 :::
@@ -65,11 +67,11 @@ A una variable aleatoria que sigue esta distribución se le denota como $X \sim 
 
 La distribución de Poisson tiene un único parámetro:
 
--   $\lambda$ (lambda): Tasa promedio de eventos por unidad de medida ($\lambda > 0$)
+- $\lambda$ (lambda): Tasa promedio de eventos por unidad de medida ($\lambda > 0$)
 
-    -   También representa tanto la media como la varianza de la distribución
-    -   Es un número real positivo
-    -   Sus unidades dependen del contexto (eventos/hora, defectos/lote, etc.)
+  - También representa tanto la media como la varianza de la distribución
+  - Es un número real positivo
+  - Sus unidades dependen del contexto (eventos/hora, defectos/lote, etc.)
 
 **Parámetros Estadísticos**
 
@@ -109,8 +111,8 @@ c)  ¿Cuál es la probabilidad de recibir 3 o menos llamadas en un minuto?
 
 **Identificación del modelo:**
 
--   Variable: $X$ = número de llamadas por minuto
--   Distribución: $X \sim \text{Poisson}(\lambda = 4)$
+- Variable: $X$ = número de llamadas por minuto
+- Distribución: $X \sim \text{Poisson}(\lambda = 4)$
 
 ```{r ejemplo-basico}
 # Parámetro
@@ -489,10 +491,10 @@ ggplot(data_multiple, aes(x = valores, fill = tipo)) +
 
 Consideremos una variable aleatoria $X \sim \text{Poisson}(\lambda = 3)$. Vamos a generar múltiples muestras de diferentes tamaños y observar cómo se comporta la distribución de la media muestral $\bar{X}$.
 
-**Teoría esperada:** 
+**Teoría esperada:**
 
-- Para muestras de tamaño $n$ de $X \sim \text{Poisson}(\lambda)$ 
-- $\bar{X} \sim N\left(\lambda, \frac{\lambda}{n}\right)$ cuando $n$ es grande 
+- Para muestras de tamaño $n$ de $X \sim \text{Poisson}(\lambda)$
+- $\bar{X} \sim N\left(\lambda, \frac{\lambda}{n}\right)$ cuando $n$ es grande
 - $E(\bar{X}) = \lambda$ y $\text{Var}(\bar{X}) = \frac{\lambda}{n}$
 
 ```{r configuracion-tcl}
@@ -847,88 +849,347 @@ ggplot(data_epi, aes(x = casos, y = probabilidad, fill = escenario)) +
 
 ::: {#exr-centro-atencion}
 Un centro de atención telefónica recibe llamadas siguiendo una distribución de Poisson con una tasa promedio de 6 llamadas por minuto.
+::: 
 
-**Preguntas:**
+```{r}
+#a)  ¿Cuál es la probabilidad de recibir exactamente 4 llamadas en un minuto?
+a1<-dpois(4,lambda=6)
 
-a)  ¿Cuál es la probabilidad de recibir exactamente 4 llamadas en un minuto?
+#b)  ¿Cuál es la probabilidad de no recibir ninguna llamada en 30 segundos?
+b1<-dpois(0,lambda=3)
 
-b)  ¿Cuál es la probabilidad de no recibir ninguna llamada en 30 segundos?
+#c)  ¿Cuál es el número esperado de llamadas en una hora?
+c1<-6*60
 
-c)  ¿Cuál es el número esperado de llamadas en una hora?
+#d)  ¿Cuál es la probabilidad de recibir entre 8 y 12 llamadas (inclusive) en dos minutos
+d1<-sum(dpois(8:12,lambda=12))
+cat("EJERCICIO 1: CENTRO TELEFONICO\n")
+cat("a) P(X = 4):", a1, "\n")
+cat("b) P(X = 0 en 30 segundos):", b1, "\n")
+cat("c) Media en una hora:", c1, "\n")
+cat("d) P(8 <= X <= 12):", d1, "\n\n")
 
-d)  ¿Cuál es la probabilidad de recibir entre 8 y 12 llamadas (inclusive) en dos minutos?
-:::
+```
+
+
+
 
 ::: {#exr-linea_prod}
 Una línea de producción tiene en promedio 1.5 defectos por cada 100 productos fabricados.
-
-**Preguntas:**
-
-a)  Si se fabrican 500 productos, ¿cuál es la probabilidad de tener exactamente 8 defectos?
-
-b)  ¿Cuál es la probabilidad de tener 10 o más defectos en 500 productos?
-
-c)  ¿Cuántos productos se deben fabricar para que la probabilidad de tener al menos un defecto sea de 0.95?
-
-d)  Si la empresa mejora el proceso y reduce los defectos a 1.2 por cada 100 productos, ¿cuál sería la nueva probabilidad de tener 10 o más defectos en 500 productos?
 :::
+
+```{r}
+lambda_500<-500*(1.5/100)
+#a)  Si se fabrican 500 productos, ¿cuál es la probabilidad de tener exactamente 8 defectos?
+a2<-dpois(8,lambda=lambda_500)
+#b)  ¿Cuál es la probabilidad de tener 10 o más defectos en 500 productos?
+b2<-ppois(9,lambda=lambda_500,lower.tail=FALSE)
+#c)  ¿Cuántos productos se deben fabricar para que la probabilidad de tener al menos un defecto sea de 0.95?
+n<-ceiling(-log(1-0.95)/(1.5/100))
+
+prob_c<-1-exp(-n*(1.5/100))
+#d)  Si la empresa mejora el proceso y reduce los defectos a 1.2 por cada 100 productos, ¿cuál sería la nueva probabilidad de tener 10 o más defectos en 500 productos?
+ lambda_mejorada<-500*(1.2/100) 
+ d2 <- ppois(9, lambda = lambda_mejorada,lower.tail = FALSE)
+
+cat("EJERCICIO 2: LINEA DE PRODUCCION\n")
+cat("a) P(X = 8):", a2, "\n")
+cat("b) P(X >= 10):", b2, "\n")
+cat("c) Numero de productos:", n, "\n")
+cat("   Probabilidad con ese numero:", prob_c, "\n")
+cat("d) Nueva P(X >= 10):", d2, "\n\n")
+
+```
 
 ::: {#exr-hospital}
 El servicio de urgencias de un hospital recibe pacientes según un proceso de Poisson con una tasa promedio de 2.5 pacientes por hora durante la noche.
+::: 
+```{r}
+lambda_hora<-2.5
+#a)  ¿Cuál es la probabilidad de que lleguen exactamente 3 pacientes en una hora?
+prob_a <- dpois(x = 3, lambda = lambda_hora)
+cat("a) Probabilidad de 3 pacientes en 1 hora:", prob_a, "\n")
 
-**Preguntas:**
+#b)  ¿Cuál es la probabilidad de que no llegue ningún paciente en 2 horas consecutivas?
+lambda_2h <- lambda_hora * 2
+prob_b <- dpois(x = 0, lambda = lambda_2h)
+cat("b) Probabilidad de 0 pacientes en 2 horas:", prob_b, "\n")
 
-a)  ¿Cuál es la probabilidad de que lleguen exactamente 3 pacientes en una hora?
+#c)  El hospital tiene capacidad para atender 8 pacientes por turno de 4 horas. ¿Cuál es la probabilidad de superar esta capacidad?
+lambda_4h <- lambda_hora * 4
+prob_c <- ppois(q = 8, lambda = lambda_4h, lower.tail = FALSE)
+cat("c) Probabilidad de superar capacidad de 8 en 4 horas:", prob_c, "\n")
 
-b)  ¿Cuál es la probabilidad de que no llegue ningún paciente en 2 horas consecutivas?
+#d)  ¿Cuál debería ser la capacidad mínima para que la probabilidad de saturación sea menor al 10% en un turno de 4 horas?
+capacidad_d <- qpois(p = 0.90, lambda = lambda_4h)
+prob_saturacion <- ppois(q = capacidad_d, lambda = lambda_4h, lower.tail = FALSE)
 
-c)  El hospital tiene capacidad para atender 8 pacientes por turno de 4 horas. ¿Cuál es la probabilidad de superar esta capacidad?
+cat("d) Capacidad mínima requerida:", capacidad_d, "pacientes\n")
+cat("   Probabilidad de saturación con capacidad de", capacidad_d, ":", prob_saturacion, "\n")
 
-d)  ¿Cuál debería ser la capacidad mínima para que la probabilidad de saturación sea menor al 10% en un turno de 4 horas?
-:::
+```
 
 ::: {#exr-tcl_poisson}
 Implementa una verificación completa del Teorema Central del Límite para una distribución Poisson con $\lambda = 7$.
 :::
+```{r}
+# TEOREMA CENTRAL DEL LIMITE
+# Distribucion Poisson con lambda = 7
+set.seed(123)
+#datos
+lambda <- 7
+N <- 10000
+tamanos <- c(1, 2, 5, 10, 30, 50, 100)
+# Media y desviacion estandar 
+media_teorica <- lambda
+desviacion <- sqrt(lambda)
 
+# 1. SIMULACION DE MEDIAS MUESTRALES
+resultados <- list()
+for (n in tamanos) {
+
+# Generar N muestras de tamano n
+  muestras <- matrix(rpois(N * n, lambda = lambda),nrow = N,ncol = n)
+
+# Calcular las medias muestrales
+medias <- rowMeans(muestras)
+
+# Estandarizar las medias
+Z <- (medias - lambda) / sqrt(lambda / n)
+
+resultados[[as.character(n)]] <- list(medias = medias,Z = Z)}
+
+# 2. COMPARACION DE ESTADISTICAS
+comparacion <- data.frame(n = tamanos,Media = NA,Varianza = NA,Media_Z = NA,Varianza_Z = NA)
+for (i in seq_along(tamanos)) 
+{n <- tamanos[i] 
+medias<-resultados[[as.character(n)]]$medias 
+Z <- resultados[[as.character(n)]]$Z
+
+comparacion$Media[i] <- mean(medias)
+comparacion$Varianza[i] <- var(medias)
+comparacion$Media_Z[i] <- mean(Z)
+comparacion$Varianza_Z[i] <- var(Z)}
+
+print(comparacion)
+
+# 3. HISTOGRAMAS Y NORMAL TEORICA
+
+par(mfrow = c(2, 4))
+
+for (n in tamanos) {Z <- resultados[[as.character(n)]]$Z
+hist( Z, probability = TRUE, breaks = 35, main = paste("Tamano n =", n), xlab = "Valor estandarizado",col = "lightblue",border = "white")
+curve(dnorm(x, mean = 0, sd = 1),add = TRUE,col = "red",lwd = 2)}
+
+par(mfrow = c(1, 1))
+
+# 4. GRAFICOS Q-Q
+par(mfrow = c(2, 4))
+
+for (n in tamanos) {Z <- resultados[[as.character(n)]]$Z
+qqnorm(Z, main = paste("Q-Q Plot n =", n),pch = 16,cex = 0.4)
+qqline(Z, col = "red", lwd = 2)}
+par(mfrow = c(1, 1))
+
+# 5. COMPARACION CON LA NORMAL ESTANDAR
+n <- 100
+Z <- resultados[["100"]]$Z
+cat("\nCOMPROBACION PARA n = 100\n")
+cat("Media de Z:", mean(Z), "\n")
+cat("Varianza de Z:", var(Z), "\n")
+cat("Media teorica: 0\n")
+cat("Varianza teorica: 1\n")
+
+# Comparacion de probabilidades
+cat("P(-1.96 < Z < 1.96):",mean(Z > -1.96 & Z < 1.96),"\n")
+cat("Probabilidad normal teorica:",pnorm(1.96) - pnorm(-1.96), "\n")
+
+```
 ::: {#exr-prop_aditiva}
 Verifica por simulación que si $X_1 \sim \text{Poisson}(3.5)$ y $X_2 \sim \text{Poisson}(2.8)$ son independientes, entonces $X_1 + X_2 \sim \text{Poisson}(6.3)$.
-
-**Pasos específicos:**
-
-a)  Generar 10,000 muestras de cada distribución y calcule su suma
-b)  Comparar las estadísticas de la suma con una Poisson(6.3) directa
-c)  Extienda la verificación a la suma de 4 variables Poisson independientes
 :::
+```{r}
+lambdas <- c(3.5, 2.8, 1.5, 2.2)
+lambda_total4 <- sum(lambdas)
+#a)  Generar 10,000 muestras de cada distribución y calcule su suma
+X1 <- rpois(N, lambda = lambdas[1])
+X2 <- rpois(N, lambda = lambdas[2])
+X3 <- rpois(N, lambda = lambdas[3])
+X4 <- rpois(N, lambda = lambdas[4])
 
+suma4 <- X1 + X2 + X3 + X4
+
+
+#b)  Comparar las estadísticas de la suma con una Poisson(6.3) directa
+# Funcion para calcular estadisticas
+estadisticas <- function(x) {c(Media = mean(x),Varianza = var(x),Desviacion = sd(x))}
+
+poisson_directa4 <- rpois(N,lambda = lambda_total4)
+
+comparacion4 <- rbind(Suma_cuatro_variables = estadisticas(suma4),Poisson_directa = estadisticas(poisson_directa4))
+
+
+
+print(comparacion4)
+
+
+#c)  Extienda la verificación a la suma de 4 variables Poisson independientes
+cat("\nValores teoricos para cuatro variables:\n")
+cat("Lambda total:", lambda_total4, "\n")
+cat("Media:", lambda_total4, "\n")
+cat("Varianza:", lambda_total4, "\n")
+cat("Desviacion estandar:", sqrt(lambda_total4), "\n")
+valores4 <- 0:max(c(suma4, poisson_directa4))
+
+plot(valores4,as.numeric(prop.table(table(factor(suma4, levels = valores4)))),type = "b",pch = 16,col = "blue",xlab = "Numero de eventos",ylab = "Probabilidad",main = "Suma de cuatro variables Poisson")
+
+lines(valores4,as.numeric(prop.table(table(factor(poisson_directa4, levels = valores4)))),type = "b",pch = 17,col = "darkgreen")
+lines(valores4,dpois(valores4, lambda = lambda_total4),type = "b",pch = 15,col = "red")
+legend("topright",legend = c("Suma de cuatro variables","Poisson directa","Poisson teorica"),col = c("blue", "darkgreen", "red"),pch = c(16, 17, 15),lty = 1,cex = 0.75)
+
+
+
+
+```
 ::: {#exr-aplicacion_web}
 Un sitio web recibe en promedio 15 visitantes por minuto durante las horas pico. El servidor puede manejar hasta 25 solicitudes simultáneas sin degradación del rendimiento.
-
-**Análisis requerido:**
-
-a)  ¿Cuál es la probabilidad de que en un minuto el servidor experimente degradación?
-
-b)  Si se duplica la capacidad del servidor (50 solicitudes), ¿cómo cambia la probabilidad de degradación?
-
-c)  ¿Cuál sería la capacidad óptima del servidor para que la probabilidad de degradación sea menor al 1%?
-
-d)  Simule el comportamiento del servidor durante una hora (60 minutos) y calcule el porcentaje de tiempo con degradación.
 :::
 
+```{r}
+set.seed(123)
+# Datos 
+lambda <- 15
+capacidad <- 25
+capacidad_doble <- 50
+#a)  ¿Cuál es la probabilidad de que en un minuto el servidor experimente degradación?
+prob_a <- ppois(capacidad,lambda = lambda,lower.tail = FALSE)
+
+cat("Inciso a - Probabilidad de degradacion:\n")
+cat(prob_a, "\n")
+cat("Porcentaje:", prob_a * 100, "%\n")
+
+#b)  Si se duplica la capacidad del servidor (50 solicitudes), ¿cómo cambia la probabilidad de degradación?
+
+prob_b <- ppois(capacidad_doble,lambda = lambda,lower.tail = FALSE)
+
+cat("\nInciso b - Capacidad de 50 solicitudes:\n")
+cat(prob_b, "\n")
+cat("Porcentaje:", prob_b * 100, "%\n")
+
+#c)  ¿Cuál sería la capacidad óptima del servidor para que la probabilidad de degradación sea menor al 1%?
+capacidad_optima <- 0
+while (ppois(capacidad_optima,lambda = lambda,lower.tail = FALSE) >= 0.01) {capacidad_optima <- capacidad_optima + 1}
+
+cat("\nInciso c - Capacidad optima:\n")
+cat("Capacidad minima:", capacidad_optima, "\n")
+cat("Probabilidad de degradacion:",ppois(capacidad_optima, lambda, lower.tail= FALSE),"\n")
+
+#d)  Simule el comportamiento del servidor durante una hora (60 minutos) y calcule el porcentaje de tiempo con degradación.
+minutos <- 60
+solicitudes <- rpois(minutos,lambda = lambda)
+degradacion <- solicitudes > capacidad
+minutos_degradacion <- sum(degradacion)
+porcentaje_degradacion <- (minutos_degradacion / minutos) * 100
+
+cat("\nInciso d - Simulacion de 60 minutos:\n")
+cat("Total de minutos:", minutos, "\n")
+cat("Minutos con degradacion:", minutos_degradacion, "\n")
+cat("Porcentaje de degradacion:",porcentaje_degradacion, "%\n")
+
+plot(1:minutos,solicitudes,type = "h",lwd = 3,col = ifelse(degradacion, "red", "blue"),main = "Solicitudes recibidas durante 60 minutos",xlab = "Minutos",ylab = "Numero de solicitudes")
+abline(h = capacidad,col = "red",lty = 2,lwd = 4)
+legend("topright",legend = c("Solicitudes", "Limite del servidor"),col = c("blue", "red"),lty = c(1, 2),lwd = 4)
+
+```
 ::: {#exr-inventarios}
 Una tienda registra que el número de cierto producto vendido por día sigue una distribución Poisson con $\lambda = 8$.
-
-**Problemas de optimización:**
-
-a)  Si la tienda mantiene un inventario de 12 unidades al inicio del día, ¿cuál es la probabilidad de quedarse sin existencias?
-
-b)  ¿Cuántas unidades debe tener para que la probabilidad de agotarse sea menor al 5%?
-
-c)  Calcule el costo esperado diario si:
-
-    -   Cada unidad no vendida cuesta \$2 mantenerla en inventario
-    -   Cada venta perdida por falta de stock cuesta \$15
-    -   El costo de adquisición es \$10 por unidad
-
-d)  Determine el nivel óptimo de inventario que minimiza el costo total esperado.
 :::
+
+```{r}
+set.seed(123)
+# Datos 
+lambda <- 8
+inventario <- 12
+costo_mantenimiento <- 2
+costo_venta_perdida <- 15
+costo_adquisicion <- 10
+#a)  Si la tienda mantiene un inventario de 12 unidades al inicio del día, ¿cuál es la probabilidad de quedarse sin existencias?
+prob_agotamiento <- ppois(inventario,lambda = lambda,lower.tail = FALSE)
+
+cat("INCISO A\n")
+cat("Probabilidad de agotamiento:", prob_agotamiento, "\n")
+cat("Porcentaje:", prob_agotamiento * 100, "%\n")
+
+#b)  ¿Cuántas unidades debe tener para que la probabilidad de agotarse sea menor al 5%?
+capacidad <- 0
+while (ppois(capacidad,lambda = lambda,lower.tail = FALSE) >= 0.05) {capacidad <- capacidad + 1}
+
+cat("\nINCISO B\n")
+cat("Inventario minimo:", capacidad, "unidades\n")
+cat("Probabilidad de agotamiento:",ppois(capacidad, lambda, lower.tail = FALSE),"\n")
+
+#c)  Calcule el costo esperado diario si:
+#Cada unidad no vendida cuesta \$2 mantenerla en inventario
+# Cada venta perdida por falta de stock cuesta \$15
+# El costo de adquisición es \$10 por unidad
+x <- 0:100
+probabilidades <- dpois(x, lambda = lambda)
+# Unidades sobrantes
+sobrantes <- pmax(inventario - x, 0)
+
+# Unidades de demanda no atendida
+ventas_perdidas <- pmax(x - inventario, 0)
+
+# Costos esperados
+costo_compra <- inventario * costo_adquisicion
+costo_mantener <- costo_mantenimiento *
+  sum(sobrantes * probabilidades)
+
+costo_perdidas <- costo_venta_perdida *
+  sum(ventas_perdidas * probabilidades)
+
+costo_total <- costo_compra +
+  costo_mantener +
+  costo_perdidas
+cat("\nINCISO C\n")
+cat("Costo de adquisicion: $", costo_compra, "\n")
+cat("Costo de mantenimiento: $", costo_mantener, "\n")
+cat("Costo de ventas perdidas: $", costo_perdidas, "\n")
+cat("Costo total esperado: $", costo_total, "\n")
+
+#d)  Determine el nivel óptimo de inventario que minimiza el costo total esperado.
+# Evaluar diferentes cantidades de inventario
+cantidades <- 0:30
+
+# Calcular costo esperado para cada cantidad
+costos <- numeric(length(cantidades))
+
+for (i in seq_along(cantidades)) {Q <- cantidades[i]
+sobrantes <- pmax(Q - x, 0)
+ventas_perdidas <- pmax(x - Q, 0)
+compra <- Q * costo_adquisicion
+mantenimiento <- costo_mantenimiento *
+    sum(sobrantes * probabilidades)
+perdidas <- costo_venta_perdida *
+    sum(ventas_perdidas * probabilidades)
+costos[i] <- compra + mantenimiento + perdidas}
+
+# Tabla de costos
+tabla_costos <- data.frame(Inventario = cantidades,Costo_esperado = costos)
+print(tabla_costos)
+# Encontrar el inventario optimo
+indice_optimo <- which.min(costos)
+inventario_optimo <- cantidades[indice_optimo]
+costo_minimo <- costos[indice_optimo]
+
+cat("\nINCISO D\n")
+cat("Inventario optimo:", inventario_optimo, "unidades\n")
+cat("Costo minimo esperado: $", costo_minimo, "\n")
+
+plot(cantidades,costos,type = "b",pch = 16,col = "pink",xlab = "Unidades en inventario",ylab = "Costo esperado diario ($)",main = "Optimizacion del inventario")
+points(inventario_optimo,costo_minimo,col = "deeppink",pch = 19,cex = 1.5)
+
+abline(v = inventario_optimo,col = "dodgerblue",lty = 2)
+legend("topright",legend = "Inventario optimo",col = "gold",pch = 19,lty = 2)
+```
+  
