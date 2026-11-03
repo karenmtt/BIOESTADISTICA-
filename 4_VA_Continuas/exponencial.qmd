@@ -128,8 +128,7 @@ Usando la sustitución $u = -\lambda t$, $du = -\lambda dt$:
 
 \begin{equation}
 F(x) = \lambda \cdot \frac{1}{-\lambda} \int_{0}^{-\lambda x} e^{u} du = -\left[e^{-\lambda t}\right]_{0}^{x}
-\end{equation}
-\begin{equation}
+\end{equation} \begin{equation}
 F(x) = -\left(e^{-\lambda x} - e^{0}\right) = -(e^{-\lambda x} - 1) = 1 - e^{-\lambda x},
 \end{equation}
 
@@ -1021,6 +1020,119 @@ Genera una simulación con tamaños de muestra de 10, 50, 100, 500 y 1000 observ
 1.  Calcula la media, varianza y mediana muestral.
 2.  Compara estos estadísticos con los valores teóricos.
 3.  Grafica la distribución de las muestras junto con la densidad teórica.
-
-
 :::
+```{r}
+
+# DISTRIBUCIÓN EXPONENCIAL Exp(lambda = 0.8)
+
+
+library(ggplot2)
+library(gridExtra)
+
+set.seed(123)
+
+# Parámetro
+lambda <- 0.8
+
+# Tamaños de muestra
+n_values <- c(10, 50, 100, 500, 1000)
+
+
+# VALORES TEÓRICOS
+
+
+media_teorica <- 1/lambda
+varianza_teorica <- 1/(lambda^2)
+mediana_teorica <- log(2)/lambda
+
+cat("VALORES TEÓRICOS\n")
+cat("-------------------------\n")
+cat("Media =", media_teorica, "\n")
+cat("Varianza =", varianza_teorica, "\n")
+cat("Mediana =", mediana_teorica, "\n\n")
+
+
+# TABLA DE RESULTADOS
+
+
+resultados <- data.frame(
+  n = numeric(),
+  Media_Muestral = numeric(),
+  Varianza_Muestral = numeric(),
+  Mediana_Muestral = numeric()
+)
+
+
+# SIMULACIÓN
+
+
+for(n in n_values){
+
+  muestra <- rexp(n, rate = lambda)
+
+  media_muestral <- mean(muestra)
+  varianza_muestral <- var(muestra)
+  mediana_muestral <- median(muestra)
+
+  resultados <- rbind(
+    resultados,
+    data.frame(
+      n = n,
+      Media_Muestral = round(media_muestral,4),
+      Varianza_Muestral = round(varianza_muestral,4),
+      Mediana_Muestral = round(mediana_muestral,4)
+    )
+  )
+
+  # HISTOGRAMA + DENSIDAD TEÓRICA
+  
+  datos <- data.frame(x = muestra)
+
+  g <- ggplot(datos, aes(x = x)) +
+
+    geom_histogram(
+      aes(y = after_stat(density)),
+      bins = 30,
+      fill = "skyblue",
+      color = "black"
+    ) +
+
+    stat_function(
+      fun = dexp,
+      args = list(rate = lambda),
+      color = "red",
+      linewidth = 1.2
+    ) +
+
+    labs(
+      title = paste("Distribución Exponencial λ = 0.8"),
+      subtitle = paste("Tamaño de muestra n =", n),
+      x = "x",
+      y = "Densidad"
+    ) +
+
+    theme_minimal()
+
+  print(g)
+}
+
+
+# TABLA COMPARATIVA
+
+
+cat("\n")
+cat("\n")
+cat("COMPARACIÓN DE ESTADÍSTICOS\n")
+cat("\n\n")
+
+print(resultados)
+
+cat("\n")
+cat("Valores teóricos:\n")
+cat("Media =", round(media_teorica,4), "\n")
+cat("Varianza =", round(varianza_teorica,4), "\n")
+cat("Mediana =", round(mediana_teorica,4), "\n")
+```
+
+
+
