@@ -1,5 +1,7 @@
 ---
-title: "Distribución Geométrica"
+title: "Ejercicios resueltos Distribución Geométrica"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -33,7 +35,7 @@ Una variable aleatoria $X$ que tiene distribución geométrica será denotada co
 
 **Parámetros**
 
--   $p$: probabilidad de éxito en cada ensayo, donde $0 < p \leq 1$
+- $p$: probabilidad de éxito en cada ensayo, donde $0 < p \leq 1$
 
 **Función de Distribución**
 
@@ -441,52 +443,78 @@ kable(head(comparacion_sim, 12),
 
 ::: {#exr-geom_1}
 Se lanza una moneda hasta obtener la primera cara.
-
--   
-
-    a)  ¿Cuál es la probabilidad de necesitar exactamente 5 lanzamientos?
-
--   
-
-    b)  ¿Cuál es la probabilidad de necesitar más de 3 lanzamientos?
-
--   
-
-    c)  Calcule la media y varianza del número de lanzamientos.
 :::
+```{r}
+p1<-0.5
+#a)  ¿Cuál es la probabilidad de necesitar exactamente 5 lanzamientos?
+a1 <-(1-p1)^(5-1)*p1
+
+# b)  ¿Cuál es la probabilidad de necesitar más de 3 lanzamientos?
+b1<-(1-p1)^3
+
+#c)  Calcule la media y varianza del número de lanzamientos.
+media1 <-1/p1
+varianza1 <-(1-p1)/p1^2
+cat("EJERCICIO 1: MONEDA\n")
+cat("a) P(X = 5):", a1, "\n")
+cat("b) P(X > 3):", b1, "\n")
+cat("c) Media:", media1, "\n")
+cat("   Varianza:", varianza1, "\n\n")
+
+```
 
 ::: {#exr-geom_2}
 Un jugador de básquetbol tiene 70% de probabilidad de anotar un tiro libre.
-
--   
-
-    a)  ¿Cuál es la probabilidad de que anote en el tercer intento por primera vez?
-
--   
-
-    b)  ¿Cuántos intentos se espera que necesite para anotar?
-
--   
-
-    c)  ¿Cuál es la probabilidad de necesitar entre 2 y 5 intentos?
-
-
 :::
+```{r ejercicio- jugador}
+p2<-0.7
+#a)  ¿Cuál es la probabilidad de que anote en el tercer intento por primera vez?
+
+a2 <- (1 - p2)^(3 - 1) * p2
+
+#b)  ¿Cuántos intentos se espera que necesite para anotar?
+
+media2 <- 1 / p2
+
+#c)  ¿Cuál es la probabilidad de necesitar entre 2 y 5 intentos?
+
+b2 <- sum((1 - p2)^(2:5 - 1) * p2)
+
+cat("EJERCICIO 2: BASQUETBOL\n")
+cat("a) P(X = 3):", a2, "\n")
+cat("b) Media esperada:", media2, "\n")
+cat("c) P(2 <= X <= 5):", b2, "\n\n")
+
+```
 
 ::: {#exr-geom_3}
 Una máquina tiene probabilidad 0.02 de producir una pieza defectuosa.
+::: 
 
--   
+```{r ejercicio maquina}
+p<-0.02
+q<-1-p
 
-    a)  Si se inspeccionan las piezas hasta encontrar la primera defectuosa, ¿cuál es el número esperado de inspecciones?
+#a)  Si se inspeccionan las piezas hasta encontrar la primera defectuosa, ¿cuál es el número esperado de inspecciones?
+media <- 1 / p
 
--   
+cat("a) Numero esperado de inspecciones:", media, "\n")
 
-    b)  ¿Cuál es la probabilidad de que la primera pieza defectuosa aparezca después de la pieza número 100?
+# b)  ¿Cuál es la probabilidad de que la primera pieza defectuosa aparezca después de la pieza número 100?
+prob_b <- q^100
 
--   
+cat("b) P(X > 100):", prob_b, "\n")
+cat("Porcentaje:", prob_b * 100, "%\n")
 
-    c)  Demuestre la propiedad de falta de memoria para este problema.
-:::
+#c)  Demuestre la propiedad de falta de memoria para este problema.
+m <- 100
+n <- 20
+# Probabilidad condicional P(X > m+n | X > m)
+lado_izquierdo <- q^(m + n) / q^m
 
+#Probabilidad de necesitas más n piezas adicionales?
+lado_derecho <- q^n
+cat("c) Lado izquierdo:", lado_izquierdo, "\n")
+cat("   Lado derecho:", lado_derecho, "\n")
 
+```
