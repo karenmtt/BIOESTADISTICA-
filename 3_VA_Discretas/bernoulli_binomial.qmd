@@ -1,5 +1,7 @@
 ---
-title: "Distribuciones Bernoulli y Binomial"
+title: "Ejercicios Bernoulli y Binomial"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -16,6 +18,7 @@ text-align: justify}
 library(tidyverse)
 library(kableExtra)
 library(gridExtra)
+library(ggplot2)
 ```
 
 ## Distribución Bernoulli
@@ -40,7 +43,7 @@ A una variable aleatoria con distribución Bernoulli la denotaremos como $X \sim
 
 **Parámetros**
 
--   $p$: probabilidad de éxito, donde $0 \leq p \leq 1$
+- $p$: probabilidad de éxito, donde $0 \leq p \leq 1$
 
 **Parámetros Estadísticos**
 
@@ -204,8 +207,8 @@ para $x = 0, 1, 2, \ldots, n$, donde $\binom{n}{x} = \frac{n!}{x!(n-x)!}$. A una
 
 **Parámetros**
 
--   $n$: número de ensayos (entero positivo)
--   $p$: probabilidad de éxito en cada ensayo, donde $0 \leq p \leq 1$
+- $n$: número de ensayos (entero positivo)
+- $p$: probabilidad de éxito en cada ensayo, donde $0 \leq p \leq 1$
 
 **Parámetros Estadísticos**
 
@@ -708,7 +711,6 @@ if(condicion1 & condicion2) {
 ## Aplicaciones Prácticas
 
 ::: {#exm-medicina}
-
 ### Medicina - Efectividad de Tratamiento
 
 Un nuevo medicamento tiene una probabilidad de 0.8 de curar una enfermedad. Se prueba en 25 pacientes.
@@ -784,7 +786,6 @@ ggplot(medicina_data, aes(x = k, y = probabilidad)) +
     # plot.background = element_rect(fill = "white", color = NA)
   )
 ```
-
 :::
 
 ## Ejercicios Propuestos
@@ -794,49 +795,180 @@ ggplot(medicina_data, aes(x = k, y = probabilidad)) +
 ::: {#exr-bernoulli-maquina}
 Una máquina produce piezas defectuosas con probabilidad 0.02. Si se define éxito como "pieza defectuosa":
 
--   
+a)  ¿Cuál es la probabilidad de obtener una pieza no defectuosa?
 
-    a)  ¿Cuál es la probabilidad de obtener una pieza no defectuosa?
+b)  Calcule la media y varianza de esta distribución
 
--   
-
-    b)  Calcule la media y varianza de esta distribución
-
--   
-
-    c)  Si se inspeccionan 10 piezas independientemente, ¿cuál es la probabilidad de encontrar exactamente 2 defectuosas?
+c)  Si se inspeccionan 10 piezas independientemente, ¿cuál es la probabilidad de encontrar exactamente 2 defectuosas?
 :::
+
+```{r ejercicio-maquina}
+#Parámetro
+p <-0.02
+#a)Probabilidad de pieza no defectuosa
+prob_no_defectuosa <- 1 - p
+prob_no_defectuosa
+#b)media y varianza 
+media <- p
+varianza <- p* (1-p)
+media
+varianza
+#c) probabilidad de 2 defectuosas en 10 pzs
+prob_2_defectuosas <- dbinom(x = 2, size = 10, prob = p)
+prob_2_defectuosas
+```
 
 ::: {#exr-examen}
-En un examen de opción múltiple con 4 opciones por pregunta, un estudiante responde al azar:
-
--   
-
-    a)  Modele como Bernoulli la respuesta a una pregunta
-
--   
-
-    b)  ¿Cuál es la probabilidad de acertar?
-
--   
-
-    c)  Calcule los parámetros estadísticos
+En un examen de opción múltiple con 4 opciones por pregunta, un estudiante responde al azar: a) Modele como Bernoulli la respuesta a una pregunta b) ¿Cuál es la probabilidad de acertar? c) Calcule los parámetros estadísticos
 :::
+
+```{r ejercicio-examen}
+#datos
+p <-1/4 
+q <-1-p 
+#A) Modelo bernoulli
+cat("Modelo: X ~ Bernoulli(0.25)\n")
+#B) Probabilidad de acertar
+prob_acertar<- p
+cat("Probabilidad de acertar:",prob_acertar, "\n")
+cat("Porcentaje de acierto:",prob_acertar*100, "%\n\n")
+#C) Parámetros estadisticos
+media <-p
+varianza <- p*q
+desviacion <- sqrt(varianza)
+
+cat("PARAMETROS ESTADISTICOS\n")
+cat("Media:", media, "\n")
+cat("Varianza:", varianza, "\n")
+cat("Desviacion estandar:", desviacion, "\n")
+
+```
+
 
 ### Ejercicios de Binomial
 
 ::: {#exr-binomial-monedas}
-Se lanza una moneda 15 veces: - a) ¿Cuál es la probabilidad de obtener exactamente 8 caras? - b) ¿Cuál es la probabilidad de obtener al menos 12 caras? - c) Calcule la media y desviación estándar
+Se lanza una moneda 15 veces:
+a) ¿Cuál es la probabilidad de obtener exactamente 8 caras? 
+b) ¿Cuál es la probabilidad de obtener al menos 12 caras?
+c) Calcule la media y desviación estándar
 :::
+```{r ejercicio-monedas}
+#Datos
+n <- 15
+p <- 0.5
+q <- 1 - p
+#Modelo binomial
+cat("Modelo: X ~ Binomial(15, 0.5)\n\n")
+
+#A)Probabilidad de 8 caras
+prob_8 <- dbinom(8, size = n, prob = p)
+cat("a) Probabilidad de exactamente 8 caras:\n")
+cat(prob_8, "\n")
+cat("Porcentaje:", prob_8 * 100, "%\n\n")
+
+#B)Probabilidad 12 cartas
+prob_12 <- pbinom(11, size = n, prob = p,
+                  lower.tail = FALSE)
+cat("b) Probabilidad de al menos 12 caras:\n")
+cat(prob_12, "\n")
+cat("Porcentaje:", prob_12 * 100, "%\n\n")
+
+#C) Media y Desviación estandar (DS)
+media <- n * p
+varianza <- n * p * q
+desviacion <- sqrt(varianza)
+
+cat("c) Parametros estadisticos:\n")
+cat("Media:", media, "\n")
+cat("Varianza:", varianza, "\n")
+cat("Desviacion estandar:", desviacion, "\n")
+
+```
 
 ::: {#exr-binomial-medicamento}
-Un medicamento tiene efectividad del 85%. Se administra a 20 pacientes: - a) ¿Cuál es la probabilidad de que se curen exactamente 18 pacientes? - b) ¿Cuál es la probabilidad de que se curen entre 15 y 19 pacientes? - c) ¿Cuántos pacientes se espera que se curen?
+Un medicamento tiene efectividad del 85%. Se administra a 20 pacientes:
+a) ¿Cuál es la probabilidad de que se curen exactamente 18 pacientes?
+b) ¿Cuál es la probabilidad de que se curen entre 15 y 19 pacientes? 
+c) ¿Cuántos pacientes se espera que se curen?
 :::
+```{r ejercicio-medicamento}
+#Datos
+n <- 20
+p <- 0.85
+q <- 1 - p
+#Modelo binomial
+cat("Modelo: X ~ Binomial(20, 0.85)\n\n")
+
+#A)Probabilidad de 18 pacientes curados
+prob_18 <- dbinom(18, size = n, prob = p)
+cat("a) Probabilidad de exactamente 18 pacientes:\n")
+cat(prob_18, "\n")
+cat("Porcentaje:", prob_18 * 100, "%\n\n")
+
+#B) Probabilidad entre 15 y 19 pacientes
+prob_15_19 <- pbinom(19, size = n, prob = p) -
+              pbinom(14, size = n, prob = p)
+
+cat("b) Probabilidad de entre 15 y 19 pacientes:\n")
+cat(prob_15_19, "\n")
+cat("Porcentaje:", prob_15_19 * 100, "%\n\n")
+
+#C) Número esperado de pacientes curados
+media <- n * p
+
+cat("c) Numero esperado de pacientes curados:\n")
+cat(media, "pacientes\n")
+
+```
 
 ::: {#exr-simulacion_5}
 Demostrar el siguiente teorema y verificarlo mediante simulación.
 
 Sean $X$ y $Y$ dos variables aleatorias independientes con distribución $bin(n, p)$, y $bin(m, p)$, respectivamente. Entonces la variable $X+Y$ tiene distribución $bin(n+m, p)$.
 :::
+
+```{r}
+
+# 1. Definir parametros
+n <- 5
+m <- 7
+p <- 0.4
+
+# Numero de simulaciones
+N <- 100000
+
+# 2. Simular las variables aleatorias
+set.seed(123)
+
+X <- rbinom(N, size = n, prob = p)
+Y <- rbinom(N, size = m, prob = p)
+
+# 3. Sumar las variables
+S <- X + Y
+
+# 4. Simular directamente una binomial
+Z <- rbinom(N, size = n + m, prob = p)
+
+# 5. Calcular las medias
+cat("Media de X:", mean(X), "\n")
+cat("Media de Y:", mean(Y), "\n")
+cat("Media de X + Y:", mean(S), "\n")
+cat("Media de Z:", mean(Z), "\n\n")
+
+# 6. Comparar las probabilidades
+valores <- 0:(n + m)
+comparacion <- data.frame( Valores = valores, Suma_XY = as.numeric(prop.table(table(factor(S, levels = valores)) )), Binomial = dbinom(valores, size = n + m, prob = p))
+print(comparacion)
+
+# 7. Representacion grafica
+barplot(rbind(comparacion$Suma_XY, comparacion$Binomial),beside = TRUE, names.arg = valores, col = c("purple", "pink"),main = "Verificacion del teorema binomial", xlab = "Numero de exitos", ylab = "Probabilidad",legend.text = c("Suma X + Y", "Binomial (n+m, p)"))
+
+```
+
+
+
+
+
 
 
