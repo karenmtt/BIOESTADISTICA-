@@ -28,7 +28,6 @@ library(viridis)
 
 ```
 
-
 La **distribución t de Student** es una de las distribuciones de probabilidad más importantes en estadística inferencial, especialmente cuando trabajamos con muestras pequeñas o cuando la varianza poblacional es desconocida.
 
 **Usos más comunes:**
@@ -58,7 +57,6 @@ La **distribución t de Student** es una de las distribuciones de probabilidad m
 La distribución t fue desarrollada por William Sealy Gosset en 1908, quien publicó bajo el seudónimo "Student" mientras trabajaba en la cervecería Guinness.
 
 ::: {#def-tstudent}
-
 Decimos que la variable aleatoria continua $X$ tiene una **distribución t de Student** con $n > 0$ grados de libertad si su función de densidad está dada por la siguiente expresión:
 
 \begin{equation}
@@ -66,30 +64,26 @@ f(x) = \frac{\Gamma\left(\frac{n+1}{2}\right)}{\sqrt{n\pi} \Gamma\left(\frac{n}{
 \end{equation}
 
 En tal caso se escribe $X \sim t(n)$, donde $n$ es un número real positivo que representa los **grados de libertad** de la distribución.
-
 :::
 
 ## Propiedades de la función de densidad
 
 **Características principales:**
 
-1. **Dominio**: $(-\infty, \infty)$
-2. **Simetría**: La función es simétrica respecto a $x = 0$
-3. **Forma**: Campana, similar a la distribución normal estándar
-4. **Colas pesadas**: Comparada con $N(0,1)$, tiene colas más gruesas
-5. **Convergencia**: Cuando $n \to \infty$, la distribución $t(n)$ converge a $N(0,1)$
+1.  **Dominio**: $(-\infty, \infty)$
+2.  **Simetría**: La función es simétrica respecto a $x = 0$
+3.  **Forma**: Campana, similar a la distribución normal estándar
+4.  **Colas pesadas**: Comparada con $N(0,1)$, tiene colas más gruesas
+5.  **Convergencia**: Cuando $n \to \infty$, la distribución $t(n)$ converge a $N(0,1)$
 
 **Parámetro:**
 
-- **$n$**: Grados de libertad (parámetro de forma)
-  * Debe ser un número real positivo
-  * Determina qué tan "pesadas" son las colas de la distribución
-  * A mayor $n$, más se aproxima a la normal estándar
+- $n$: Grados de libertad (parámetro de forma)
+  - Debe ser un número real positivo
+  - Determina qué tan "pesadas" son las colas de la distribución
+  - A mayor $n$, más se aproxima a la normal estándar
 
-
-### Efecto de los grados de libertad 
-
-
+### Efecto de los grados de libertad
 
 ```{r}
 #| fig-width: 10
@@ -137,9 +131,6 @@ densidad_t <- ggplot(df_data, aes(x = x, y = density, color = distribution)) +
 ggplotly(densidad_t)
 ```
 
-
-
-
 **Con pocos grados de libertad:**
 
 - Las colas son más pesadas que la normal estándar
@@ -158,11 +149,9 @@ ggplotly(densidad_t)
 - Para $n \geq 30$, la diferencia con $N(0,1)$ es prácticamente imperceptible
 - Cuando $n \to \infty$: $t(n) \to N(0,1)$
 
-
-## Función de distribución acumulada (CDF) 
+## Función de distribución acumulada (CDF)
 
 ::: {#def-cdf_tstudent}
-
 La **función de distribución acumulada** de la distribución t de Student con $n$ grados de libertad se define como:
 
 $$F(x) = P(X \leq x) = \int_{-\infty}^{x} f(t) dt$$
@@ -174,24 +163,22 @@ $$f(t) = \frac{\Gamma\left(\frac{n+1}{2}\right)}{\sqrt{n\pi} \Gamma\left(\frac{n
 Por lo tanto:
 
 $$F(x) = \int_{-\infty}^{x} \frac{\Gamma\left(\frac{n+1}{2}\right)}{\sqrt{n\pi} \Gamma\left(\frac{n}{2}\right)} \left(1 + \frac{t^2}{n}\right)^{-(n+1)/2} dt$$
-
 :::
 
----
+------------------------------------------------------------------------
 
 ### Propiedades de la CDF
 
 **Características principales:**
 
-1. **Dominio**: $(-\infty, \infty)$
-2. **Imagen**: $[0, 1]$
-3. **Monótona creciente**: $F'(x) = f(x) \geq 0$
-4. **Simetría**: $F(-x) = 1 - F(x)$ (debido a la simetría de la PDF)
-5. **Límites**:
-   - $\lim_{x \to -\infty} F(x) = 0$
-   - $\lim_{x \to \infty} F(x) = 1$
-   - $F(0) = 0.5$ (por simetría)
-
+1.  **Dominio**: $(-\infty, \infty)$
+2.  **Imagen**: $[0, 1]$
+3.  **Monótona creciente**: $F'(x) = f(x) \geq 0$
+4.  **Simetría**: $F(-x) = 1 - F(x)$ (debido a la simetría de la PDF)
+5.  **Límites**:
+    - $\lim_{x \to -\infty} F(x) = 0$
+    - $\lim_{x \to \infty} F(x) = 1$
+    - $F(0) = 0.5$ (por simetría)
 
 ### Comparación de CDF con diferentes grados de libertad
 
@@ -253,7 +240,6 @@ p1 <- ggplot(df_cdf, aes(x = x, y = cdf, color = distribution, linetype = distri
 
 ggplotly(p1)
 ```
-
 
 ### Comparación conjunta: PDF y CDF
 
@@ -328,29 +314,24 @@ grid.arrange(p_pdf, p_cdf, ncol = 2,
              top = "Comparación PDF vs CDF - Distribución t de Student")
 ```
 
-
-## Cálculo de probabilidades 
+## Cálculo de probabilidades
 
 **Tipos de probabilidades**
 
 Para una variable aleatoria $X \sim t(n)$, podemos calcular diferentes tipos de probabilidades:
 
-1. **Probabilidad acumulada**: $P(X \leq a)$
-2. **Probabilidad en un intervalo**: $P(a \leq X \leq b)$
-3. **Probabilidad en la cola derecha**: $P(X \geq a)$
-4. **Probabilidad en ambas colas**: $P(X \leq -a) + P(X \geq a)$
+1.  **Probabilidad acumulada**: $P(X \leq a)$
+2.  **Probabilidad en un intervalo**: $P(a \leq X \leq b)$
+3.  **Probabilidad en la cola derecha**: $P(X \geq a)$
+4.  **Probabilidad en ambas colas**: $P(X \leq -a) + P(X \geq a)$
 
 **Ecuaciones para el cálculo**
 
-**Probabilidad acumulada:**
-$$P(X \leq a) = F(a) = \int_{-\infty}^{a} f(t) dt$$
+**Probabilidad acumulada:** $$P(X \leq a) = F(a) = \int_{-\infty}^{a} f(t) dt$$
 
-**Probabilidad en un intervalo:**
-$$P(a \leq X \leq b) = F(b) - F(a) = \int_{a}^{b} f(t) dt$$
+**Probabilidad en un intervalo:** $$P(a \leq X \leq b) = F(b) - F(a) = \int_{a}^{b} f(t) dt$$
 
-**Probabilidad en la cola derecha:**
-$$P(X \geq a) = 1 - F(a) = \int_{a}^{\infty} f(t) dt$$
-
+**Probabilidad en la cola derecha:** $$P(X \geq a) = 1 - F(a) = \int_{a}^{\infty} f(t) dt$$
 
 ```{r}
 #| fig-width: 12
@@ -444,7 +425,6 @@ grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2,
              top = "Ejemplos de Cálculo de Probabilidades - t(5)")
 ```
 
-
 ## Medidas Descriptivas
 
 Para una distribución $X \sim t(n)$:
@@ -529,55 +509,238 @@ p_var <- ggplot(df_variance, aes(x = n, y = variance)) +
 p_var
 ```
 
-
 ## Ejercicios propuestos
 
 ::: {#exr-muestras_tstudent}
-
 Genera muestras aleatorias de tamaño 100, 300 y 1000 de una distribución t de Student con 5 grados de libertad. Para cada muestra:
 
-1. Calcula la media y varianza muestral; y compara con los valores teóricos.
+1.  Calcula la media y varianza muestral; y compara con los valores teóricos.
 
-2. Para la muestra de mayor tamaño, realiza un histograma, superpone la función de densidad teórica de la variable aleatoria $t(5)$ y la función de densidad de una normal estándar.
-
+2.  Para la muestra de mayor tamaño, realiza un histograma, superpone la función de densidad teórica de la variable aleatoria $t(5)$ y la función de densidad de una normal estándar.
 :::
 
-
-::: {#exr-relacion_normal_ji}
-
+:::: {#exr-relacion_normal_ji}
 ::: {#prp-rel_normal_ji}
-
 Si $X\sim N(0,1)$ y $Y\sim \chi^2(n)$ son dos variables aleatorias independientes, entonces la variable aleatoria:
 
 $$T=\frac{X}{\sqrt{Y/n}}\sim t(n)$$
-
-
 :::
 
----
+------------------------------------------------------------------------
 
 Genera una muestra aleatoria de de tamaño 1000 para $X\sim N(0,1)$ y $Y\sim \chi^2(10)$. Calcula la variable aleatoria $T$ y compara su histograma con la función de densidad teórica de $t(10)$.
+::::
 
-:::
-
-
-::: {#exr-n_normales}
-
-
+:::: {#exr-n_normales}
 ::: {#prp-n_normal}
-
 Sean $X_1,X_2,\ldots,X_n$ variables aleatorias independientes e idénticamente distribuidas como $N(\mu,\sigma^2)$. Entonces la variable aleatoria:
 
 $$T= \frac{\overline{X}-\mu}{S/\sqrt{n}}\sim t(n-1)$$
 
 en donde $\overline{X}=\frac{1}{n}\sum_{i=1}^n X_i$ y $S^2=\frac{1}{n-1}\sum_{i=1}^n (X_i-\overline{X})^2$.
-
-
 :::
 
----
+------------------------------------------------------------------------
 
 Genera 1000 muestras aleatorias de tamaño 50 de una distribución normal estándar. Para cada muestra calcula la media muestral y la desviación estándar muestral. Luego calcula la variable aleatoria $T$ y compara su histograma con la función de densidad teórica de $t(49)$.
+::::
+```{r}
+# DISTRIBUCIÓN t DE STUDENT
+# Simulación y verificación de propiedades
 
 
-:::
+library(ggplot2)
+library(gridExtra)
+
+set.seed(123)
+
+
+# PARTE 1
+# Muestras de tamaño 100, 300 y 1000 de t(5)
+
+
+n_values <- c(100, 300, 1000)
+df_t <- 5
+
+# Valores teóricos
+media_teorica <- 0
+var_teorica <- df_t/(df_t-2)
+
+cat("MEDIA TEÓRICA =", media_teorica, "\n")
+cat("VARIANZA TEÓRICA =", var_teorica, "\n\n")
+
+resultados <- data.frame(
+  n = integer(),
+  media_muestral = numeric(),
+  varianza_muestral = numeric()
+)
+
+for(n in n_values){
+
+  muestra <- rt(n, df = df_t)
+
+  resultados <- rbind(
+    resultados,
+    data.frame(
+      n = n,
+      media_muestral = mean(muestra),
+      varianza_muestral = var(muestra)
+    )
+  )
+}
+
+print(resultados)
+
+
+# HISTOGRAMA PARA n = 1000
+# t(5) vs Normal(0,1)
+
+
+muestra1000 <- rt(1000, df = df_t)
+
+datos <- data.frame(x = muestra1000)
+
+ggplot(datos, aes(x = x)) +
+
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 40,
+    fill = "skyblue",
+    color = "black"
+  ) +
+
+  stat_function(
+    fun = dt,
+    args = list(df = df_t),
+    color = "red",
+    linewidth = 1.3
+  ) +
+
+  stat_function(
+    fun = dnorm,
+    color = "darkgreen",
+    linewidth = 1.3,
+    linetype = "dashed"
+  ) +
+
+  labs(
+    title = "Histograma de una muestra t(5)",
+    subtitle = "Comparación con t(5) teórica y Normal estándar",
+    x = "x",
+    y = "Densidad"
+  ) +
+
+  theme_minimal()
+
+
+# PARTE 2
+# T = X / sqrt(Y/n)
+# X ~ N(0,1)
+# Y ~ Chi-cuadrada(10)
+# Entonces T ~ t(10)
+
+
+N <- 1000
+
+X <- rnorm(N)
+
+Y <- rchisq(N, df = 10)
+
+T1 <- X / sqrt(Y/10)
+
+datos_T1 <- data.frame(T1)
+
+ggplot(datos_T1, aes(x = T1)) +
+
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 35,
+    fill = "orange",
+    color = "black"
+  ) +
+
+  stat_function(
+    fun = dt,
+    args = list(df = 10),
+    color = "blue",
+    linewidth = 1.3
+  ) +
+
+  labs(
+    title = expression(T==X/sqrt(Y/10)),
+    subtitle = "Comparación con la densidad teórica t(10)",
+    x = "T",
+    y = "Densidad"
+  ) +
+
+  theme_minimal()
+
+
+# PARTE 3
+# Verificación de
+#
+# T = (Xbarra - μ)/(S/sqrt(n))
+#
+# con Xi ~ N(μ,σ²)
+# Entonces T ~ t(n-1)
+
+
+B <- 1000
+n <- 50
+
+T2 <- numeric(B)
+
+for(i in 1:B){
+
+  muestra <- rnorm(n, mean = 0, sd = 1)
+
+  xbar <- mean(muestra)
+
+  s <- sd(muestra)
+
+  T2[i] <- xbar/(s/sqrt(n))
+}
+
+datos_T2 <- data.frame(T2)
+
+ggplot(datos_T2, aes(x = T2)) +
+
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 35,
+    fill = "lightgreen",
+    color = "black"
+  ) +
+
+  stat_function(
+    fun = dt,
+    args = list(df = 49),
+    color = "red",
+    linewidth = 1.3
+  ) +
+
+  labs(
+    title = expression(
+      T==(bar(X)-0)/(S/sqrt(50))
+    ),
+    subtitle = "Comparación con t(49)",
+    x = "T",
+    y = "Densidad"
+  ) +
+
+  theme_minimal()
+
+
+cat("\n")
+cat("=======================================\n")
+cat("RESUMEN DE RESULTADOS\n")
+cat("=======================================\n")
+print(resultados)
+
+cat("\nMedia simulada de T1 =", mean(T1), "\n")
+cat("Varianza simulada de T1 =", var(T1), "\n")
+
+cat("\nMedia simulada de T2 =", mean(T2), "\n")
+cat("Varianza simulada de T2 =", var(T2), "\n")
+```
+
