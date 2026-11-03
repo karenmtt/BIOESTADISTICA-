@@ -707,7 +707,6 @@ El tiempo de carga de una página web sigue una distribución uniforme entre 2 y
 2.  Cuál es el percentil 75 de los tiempos de carga?
 3.  ¿Cuál es la probabilidad de que una página cargue en menos de 4 segundos?
 
-
 ```{r}
 n <- 1000
 
@@ -738,10 +737,6 @@ cat("Percentil 75 teorico:", round(q75_teorico, 4), "segundos\n")
 cat("P(X<4)=", punif(4, 2,8))
 
 ```
-
-
-
-
 :::
 
 ------------------------------------------------------------------------
@@ -752,7 +747,6 @@ cat("P(X<4)=", punif(4, 2,8))
 Crear una distribución uniforme "truncada" y verificar el TCL.
 
 1.  Generar muestras de unif(0,1) pero solo conservar valores \> 0.3 (esto creará una distribución sesgada)
-
 
 ```{r}
 n <- 1500
@@ -774,20 +768,12 @@ ggplot(data_truncado)+
 
 ```
 
-
-
-
-
-
-
-
-
 2.  Para tamaños de muestra n = c(5, 15, 30, 60, 120):
 
     - Generar 800 medias muestrales de cada tamaño
     - Crear histogramas mostrando la normalización
     - Calcular skewness y kurtosis de las distribuciones de medias
-    
+
 ```{r tcl-simexr}
 # Parámetros de la distribución uniforme
 a_tcl <- 0
@@ -868,8 +854,7 @@ ggplot(df_tcl, aes(x = medias)) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5),
         plot.subtitle = element_text(hjust = 0.5))
-```    
-
+```
 
 3.  ¿A partir de qué tamaño de muestra la distribución de medias se ve aproximadamente normal?
 :::
@@ -880,6 +865,8 @@ ggplot(df_tcl, aes(x = medias)) +
 ### Simulación de Monte Carlo
 
 Usar simulación Monte Carlo para estimar $\pi$ usando distribución uniforme.
+
+:::
 
 
 ```{r}
@@ -901,22 +888,4 @@ ggplot(data_montecarlo)+
   coord_fixed()+
   theme_minimal()
 
-
-
-
-
-
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-:::
