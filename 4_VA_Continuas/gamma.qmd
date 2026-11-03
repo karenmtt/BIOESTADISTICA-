@@ -1025,5 +1025,163 @@ ggplot(data.frame(x = muestra_grande), aes(x = x)) +
 - Simula 1000 sumas de $n=5$ variables aleatorias $\text{exp}(\lambda = 1.5)$.
 - Grafica el histograma de las sumas y superpone la densidad teórica de $\text{gamma}(5, 1.5)$.
 - Repite el ejercicio para $n=10$ y $n=20$ y observa cómo cambia la forma de la distribución.
-
 :::
+
+```{r}
+# ==========================================================
+# DISTRIBUCIÓN GAMMA Y TEOREMA CENTRAL DEL LÍMITE
+# Gamma(alpha = 2.5, lambda = 1.8)
+# ==========================================================
+
+library(ggplot2)
+library(gridExtra)
+
+set.seed(123)
+
+# Parámetros Gamma
+alpha <- 2.5
+lambda <- 1.8
+
+# Tamaños muestrales
+n_values <- c(5, 10, 20, 30, 50, 100)
+
+# Número de simulaciones
+B <- 1000
+
+# Valores teóricos
+media_teorica <- alpha/lambda
+var_teorica <- alpha/(lambda^2)
+
+cat("MEDIA TEÓRICA =", media_teorica, "\n")
+cat("VARIANZA TEÓRICA =", var_teorica, "\n\n")
+
+# Tabla de resultados
+resultados <- data.frame()
+
+par(mfrow = c(2,3))
+
+for(n in n_values){
+
+  medias <- numeric(B)
+
+  for(i in 1:B){
+
+    muestra <- rgamma(
+      n,
+      shape = alpha,
+      rate = lambda
+    )
+
+    medias[i] <- mean(muestra)
+  }
+
+  media_medias <- mean(medias)
+  var_medias <- var(medias)
+
+  var_teorica_tcl <- var_teorica/n
+
+  resultados <- rbind(
+    resultados,
+    data.frame(
+      n = n,
+      Media_Medias = round(media_medias,4),
+      Media_Teorica = round(media_teorica,4),
+      Var_Medias = round(var_medias,4),
+      Var_Teorica_n = round(var_teorica_tcl,4)
+    )
+  )
+
+  hist(
+    medias,
+    probability = TRUE,
+    breaks = 25,
+    main = paste("n =", n),
+    xlab = "Media muestral",
+    col = "lightblue"
+  )
+
+  curve(
+    dnorm(
+      x,
+      mean = media_teorica,
+      sd = sqrt(var_teorica/n)
+    ),
+    add = TRUE,
+    col = "red",
+    lwd = 2
+  )
+}
+
+cat("====================================\n")
+cat("RESULTADOS TCL\n")
+cat("====================================\n")
+print(resultados)
+```
+
+```{r}
+# ==========================================================
+# PROPIEDAD:
+# Si Xi ~ Exp(lambda)
+# entonces Y = sum(Xi) ~ Gamma(n, lambda)
+# ==========================================================
+
+set.seed(123)
+
+lambda <- 1.5
+B <- 1000
+
+n_values <- c(5,10,20)
+
+par(mfrow = c(1,3))
+
+for(n in n_values){
+
+  sumas <- numeric(B)
+
+  for(i in 1:B){
+
+    x <- rexp(
+      n,
+      rate = lambda
+    )
+
+    sumas[i] <- sum(x)
+  }
+
+  hist(
+    sumas,
+    probability = TRUE,
+    breaks = 30,
+    main = paste("Gamma(",n,",",lambda,")"),
+    xlab = "Suma",
+    col = "lightgreen"
+  )
+
+  curve(
+    dgamma(
+      x,
+      shape = n,
+      rate = lambda
+    ),
+    add = TRUE,
+    col = "red",
+    lwd = 2
+  )
+
+  media_sim <- mean(sumas)
+  media_teo <- n/lambda
+
+  var_sim <- var(sumas)
+  var_teo <- n/(lambda^2)
+
+  cat("\n")
+  cat("============================\n")
+  cat("n =",n,"\n")
+  cat("============================\n")
+  cat("Media simulada =",media_sim,"\n")
+  cat("Media teórica  =",media_teo,"\n")
+  cat("Varianza simulada =",var_sim,"\n")
+  cat("Varianza teórica  =",var_teo,"\n")
+}
+```
+
