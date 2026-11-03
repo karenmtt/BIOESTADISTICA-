@@ -1,5 +1,7 @@
 ---
-title: "Distribución Uniforme Discreta"
+title: "Resolucion de ejercicios Distribución Uniforme Discreta"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -309,9 +311,9 @@ La distribución uniforme discreta tiene múltiples aplicaciones:
 
 ### Relación con otras distribuciones
 
--   Caso especial de la distribución categórica con probabilidades iguales
--   Límite discreto de la distribución uniforme continua
--   Base para generar otras distribuciones discretas
+- Caso especial de la distribución categórica con probabilidades iguales
+- Límite discreto de la distribución uniforme continua
+- Base para generar otras distribuciones discretas
 
 ### Teorema Central del Límite
 
@@ -387,11 +389,62 @@ cat("Varianza observada de la media:", round(var(medias_muestrales), 4), "\n")
 ::: {#exr-muestras}
 Una urna contiene 8 bolas numeradas del 1 al 8. Se extrae una bola al azar. Calcule la probabilidad de obtener un número par.
 :::
+```{r}
+set.seed(123)
+bolas <- 1:8
+numeros_pares <- bolas[bolas %% 2 == 0]
+probabilidad_par <- length(numeros_pares) / length(bolas)
+cat("EJERCICIO 1\n")
+cat("Numeros pares:", numeros_pares, "\n")
+cat("Probabilidad de obtener un numero par:",probabilidad_par, "\n")
 
+```
 ::: {#exr-enteros}
 En un juego, se selecciona aleatoriamente un número entero entre 5 y 15 (inclusive). Calcule la media y la varianza de esta distribución.
 :::
+```{r}
+valores <- 5:15
 
+media <- mean(valores)
+
+varianza <- mean((valores - media)^2)
+
+cat("\nEJERCICIO 2\n")
+cat("Media:", media, "\n")
+cat("Varianza:", varianza, "\n")
+
+
+```
 ::: {#exr-simulacion_4}
 Simule 500 observaciones de una distribución uniforme discreta en {0, 1, 2, 3, 4} y compare las frecuencias observadas con las teóricas.
 :::
+
+```{r}
+N <- 500
+
+valores_uniformes <- 0:4
+
+#observaciones aleatorias
+muestra <- sample(valores_uniformes,size = N,replace = TRUE)
+
+frecuencias_observadas <- table(factor(muestra, levels = valores_uniformes))
+
+# Frecuencias teoricas
+frecuencias_teoricas <- rep( N / length(valores_uniformes),length(valores_uniformes))
+
+comparacion <- data.frame(Valor = valores_uniformes,Observada = as.numeric(frecuencias_observadas),Teorica = frecuencias_teoricas)
+
+cat("\nEJERCICIO 3\n")
+print(comparacion)
+
+barplot(rbind(comparacion$Observada,comparacion$Teorica),beside = TRUE,names.arg = valores_uniformes,col = c("pink", "lightblue"),main = "Frecuencias observadas y teoricas",xlab = "Valores",ylab = "Frecuencia",legend.text = c("Observadas", "Teoricas"),args.legend = list(x = "topright"))
+
+# MEDIA Y VARIANZA DE LA SIMULACION
+cat("\nEstadisticas de la simulacion:\n")
+cat("Media observada:", mean(muestra), "\n")
+cat("Varianza observada:", var(muestra), "\n")
+
+cat("Media teorica:", mean(valores_uniformes), "\n")
+cat("Varianza teorica:",mean((valores_uniformes - mean(valores_uniformes))^2),"\n")
+
+```
