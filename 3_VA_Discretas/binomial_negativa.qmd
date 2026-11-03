@@ -1,5 +1,7 @@
 ---
-title: "Distribución Binomial Negativa"
+title: "Ejercicios realizados Distribución Binomial Negativa"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -34,8 +36,8 @@ donde $x = 0, 1, 2, 3, \ldots$ representa el número de fracasos. Una variable a
 
 La distribución binomial negativa tiene dos parámetros:
 
--   $r$: Número de éxitos deseados (entero positivo, $r \geq 1$)
--   $p$: Probabilidad de éxito en cada ensayo ($0 < p \leq 1$)
+- $r$: Número de éxitos deseados (entero positivo, $r \geq 1$)
+- $p$: Probabilidad de éxito en cada ensayo ($0 < p \leq 1$)
 
 **Parámetros Estadísticos**
 
@@ -61,9 +63,9 @@ Un estudiante está practicando tiros libres de baloncesto. Su probabilidad de a
 
 **Parámetros:**
 
--   $r = 2$ (queremos el segundo éxito)
--   $p = 0.6$ (probabilidad de éxito)
--   $k = 3$ (número de fracasos)
+- $r = 2$ (queremos el segundo éxito)
+- $p = 0.6$ (probabilidad de éxito)
+- $k = 3$ (número de fracasos)
 
 **Cálculo:**
 
@@ -184,14 +186,14 @@ kable(combinaciones,
 
 **Efecto de** $r$:
 
--   Al aumentar $r$, la distribución se desplaza hacia la derecha (mayor media)
--   La variabilidad también aumenta
--   Para $r = 1$, se obtiene la distribución geométrica
+- Al aumentar $r$, la distribución se desplaza hacia la derecha (mayor media)
+- La variabilidad también aumenta
+- Para $r = 1$, se obtiene la distribución geométrica
 
 **Efecto de** $p$:
 
--   Al aumentar $p$ (mayor probabilidad de éxito), la distribución se concentra más cerca de cero
--   La media y varianza disminuyen cuando $p$ aumenta
+- Al aumentar $p$ (mayor probabilidad de éxito), la distribución se concentra más cerca de cero
+- La media y varianza disminuyen cuando $p$ aumenta
 
 ## Simulación de Valores y Comparación con la Teórica
 
@@ -300,8 +302,8 @@ ggplot(data_conv) +
 
 La distribución geométrica es un caso especial de la binomial negativa cuando $r = 1$. Ambas modelan el número de fracasos antes de obtener éxitos, pero:
 
--   **Geométrica:** Número de fracasos antes del **primer** éxito
--   **Binomial Negativa:** Número de fracasos antes del **r-ésimo** éxito
+- **Geométrica:** Número de fracasos antes del **primer** éxito
+- **Binomial Negativa:** Número de fracasos antes del **r-ésimo** éxito
 
 ### Comparación Matemática
 
@@ -473,9 +475,9 @@ Es decir, la suma de $r$ variables aleatorias geométricas independientes sigue 
 
 **Justificación intuitiva**
 
--   Cada $X_i$ cuenta los fracasos antes del $i$-ésimo éxito
--   $Y = \sum_{i=1}^r X_i$ cuenta el total de fracasos antes de obtener $r$ éxitos
--   Esto es exactamente lo que modela la distribución binomial negativa
+- Cada $X_i$ cuenta los fracasos antes del $i$-ésimo éxito
+- $Y = \sum_{i=1}^r X_i$ cuenta el total de fracasos antes de obtener $r$ éxitos
+- Esto es exactamente lo que modela la distribución binomial negativa
 
 ### Verificación por Simulación
 
@@ -663,6 +665,40 @@ ggplot(data.frame(iteraciones = iteraciones_fallidas), aes(x = iteraciones)) +
 ::: {#exr-grafico}
 Implemente una función que tome como parámetros $(r, p, n_{sim})$ y devuelva un gráfico comparativo entre la suma de geométricas y la binomial negativa.
 :::
+```{r ejercicio- comparacion}
+comparar_distribuciones <- function(r, p, n_sim) {
+
+# Validar los parametros
+if (r < 1 || r != as.integer(r)) {stop("r debe ser un entero positivo")}
+
+if (p <= 0 || p >= 1) {stop("p debe estar entre 0 y 1")}
+
+if (n_sim < 1 || n_sim != as.integer(n_sim)) {stop("n_sim debe ser un entero positivo")}
+
+# Fijar semilla para reproducibilidad
+set.seed(123)
+
+# Simular la suma de r variables geometricas
+X <- matrix(rgeom(r * n_sim, prob = p),nrow = n_sim,ncol = r)
+suma_geom <- rowSums(X)
+
+# Simular la distribucion binomial negativa
+bin_neg <- rnbinom(n_sim,size = r,prob = p)
+
+# Crear valores para comparar
+valores <- 0:max(c(suma_geom, bin_neg))
+frecuencias_geom <- prop.table(table(factor(suma_geom, levels = valores)))
+frecuencias_bin <- prop.table(table(factor(bin_neg, levels = valores)))
+
+# Crear grafico comparativo
+barplot(rbind(as.numeric(frecuencias_geom),as.numeric(frecuencias_bin)),beside = TRUE,names.arg = valores,col = c("skyblue", "red"),main = "Suma de geometricas vs binomial negativa",xlab = "Numero de fracasos",ylab = "Frecuencia relativa",legend.text = c("Suma de geometricas","Binomial negativa"))
+
+# Devolver los resultados
+invisible(list(suma_geometrica = suma_geom,binomial_negativa = bin_neg))}
+comparar_distribuciones(r = 5, p = 0.4, n_sim = 10000)
+
+```
+
 
 ::: {#exr-baloncesto}
 Un jugador de baloncesto tiene 70% de efectividad en tiros libres. En una sesión de entrenamiento quiere anotar 8 tiros libres consecutivos exitosos.
@@ -671,6 +707,52 @@ a)  Modele el problema usando la proposición de suma de geométricas
 b)  Calcule el número esperado de tiros fallados
 c)  Simule 1000 sesiones de entrenamiento y compare con el valor teórico
 :::
+```{r ejercicio-baloncesto}
+
+# 1. Definir parametros
+p <- 0.70
+r <- 8
+n_sim <- 1000
+
+# 2. Calcular el valor teorico
+media_teorica <- r * (1 - p) / p
+
+cat("MODELO BINOMIAL NEGATIVO\n")
+cat("X ~ BN(8, 0.70)\n\n")
+
+cat("Numero esperado de tiros fallados:",media_teorica, "\n\n")
+
+# 3. Simular 1000 sesiones
+set.seed(123)
+
+# Simular los fallos antes de cada uno de los 8 aciertos
+simulaciones <- matrix(rgeom(n_sim * r, prob = p),nrow = n_sim,ncol = r)
+
+# Sumar los fallos de cada sesion
+fallos <- rowSums(simulaciones)
+
+# 4. Calcular la media experimental
+media_simulada <- mean(fallos)
+media_teorica <- 8 * (1 - 0.70) / 0.70
+# 5. Comparar resultados
+cat("RESULTADOS DE LA SIMULACION\n")
+cat("Sesiones simuladas:", n_sim, "\n")
+cat("Media teorica:", media_teorica, "\n")
+cat("Media simulada:", media_simulada, "\n")
+cat("Diferencia:",abs(media_teorica - media_simulada), "\n\n")
+
+# 6. Crear grafico
+hist(fallos,breaks = seq(-0.5, max(fallos) + 0.5, by = 1),probability = TRUE,col = "yellow",main = "Simulacion de tiros fallados",xlab = "Numero de tiros fallados",ylab = "Frecuencia relativa")
+
+# Agregar la media teorica
+abline(v = media_teorica,col = "green",lwd = 2,lty = 2)
+legend("topright",legend = "Media teorica",col = "pink",lty = 2,lwd = 10)
+
+
+
+```
+
+
 
 ::: {#exr-biotecnologia}
 Un laboratorio está desarrollando un nuevo medicamento. Las pruebas tienen 30% de probabilidad de ser exitosas. Necesitan 4 pruebas exitosas para continuar con la siguiente fase.
@@ -679,3 +761,33 @@ a)  ¿Cuál es la probabilidad de tener exactamente 12 pruebas fallidas?
 b)  ¿Cuál es la probabilidad de necesitar más de 20 pruebas fallidas?
 c)  Si el costo de cada prueba es \$10,000, ¿cuál es el costo esperado en pruebas fallidas?
 :::
+```{r ejercicio- lab}
+# Datos
+r <- 4
+p <- 0.30
+q <- 1 - p
+costo_prueba <- 10000
+# A) Probabilidad de 12 pruebas fallidas
+a <- dnbinom(12, size = r, prob = p)
+
+#B) Probabilidad de más de 20 pruebas fallidas
+b <- pnbinom(20, size = r, prob = p, lower.tail = FALSE)
+
+#C) Número esperado de pruebas fallidas
+esperanza <- r * q / p
+
+# Costo esperado de las pruebas fallidas
+costo_esperado <- esperanza * costo_prueba
+
+#resultados
+cat("Inciso a:", a, "\n")
+cat("Inciso b:", b, "\n")
+cat("Pruebas fallidas esperadas:", esperanza, "\n")
+cat("Costo esperado: $", costo_esperado, "\n")
+
+```
+
+
+
+
+
