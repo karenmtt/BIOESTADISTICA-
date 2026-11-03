@@ -151,7 +151,7 @@ Cuando $a = b = 1$, la distribución beta se reduce a la distribución uniforme 
 
 \begin{equation}
 X \sim \text{Beta}(1,1) \equiv \text{Uniforme}(0,1)
-\end{equation} 
+\end{equation}
 
 **Distribución arco coseno**
 
@@ -1205,3 +1205,252 @@ Genera muestras de diferentes tamaños desde 100 hasta 10000 de una distribució
 
 Para diferentes tamaños de muestra verifica el Teorema Central del Límite (TCL) utilizando la distribución beta(2,5).
 :::
+```{r}
+# DISTRIBUCIÓN BETA(2,5)
+# CONVERGENCIA DE MEDIA Y VARIANZA
+
+
+library(ggplot2)
+library(gridExtra)
+
+set.seed(123)
+
+# Parámetros de la Beta
+alpha <- 2
+beta <- 5
+
+# Valores teóricos
+media_teorica <- alpha/(alpha + beta)
+
+var_teorica <- (alpha*beta) /
+  (((alpha+beta)^2)*(alpha+beta+1))
+
+cat("Media teórica =", media_teorica, "\n")
+cat("Varianza teórica =", var_teorica, "\n")
+
+# Tamaños de muestra
+n_values <- seq(100, 10000, by = 100)
+
+# Vectores para almacenar resultados
+medias <- numeric(length(n_values))
+varianzas <- numeric(length(n_values))
+
+for(i in seq_along(n_values)){
+
+  n <- n_values[i]
+
+  muestra <- rbeta(n,
+                   shape1 = alpha,
+                   shape2 = beta)
+
+  medias[i] <- mean(muestra)
+  varianzas[i] <- var(muestra)
+}
+
+# Data frames
+datos_media <- data.frame(
+  n = n_values,
+  media = medias
+)
+
+datos_var <- data.frame(
+  n = n_values,
+  varianza = varianzas
+)
+
+# CONVERGENCIA DE LA MEDIA
+
+g1 <- ggplot(datos_media,
+             aes(x = n,
+                 y = media)) +
+
+  geom_line(color = "blue") +
+
+  geom_hline(yintercept = media_teorica,
+             color = "red",
+             linetype = "dashed",
+             linewidth = 1) +
+
+  labs(
+    title = "Convergencia de la media muestral",
+    subtitle = "Distribución Beta(2,5)",
+    x = "Tamaño de muestra",
+    y = "Media muestral"
+  ) +
+
+  theme_minimal()
+
+# CONVERGENCIA DE LA VARIANZA
+
+
+g2 <- ggplot(datos_var,
+             aes(x = n,
+                 y = varianza)) +
+
+  geom_line(color = "darkgreen") +
+
+  geom_hline(yintercept = var_teorica,
+             color = "red",
+             linetype = "dashed",
+             linewidth = 1) +
+
+  labs(
+    title = "Convergencia de la varianza muestral",
+    subtitle = "Distribución Beta(2,5)",
+    x = "Tamaño de muestra",
+    y = "Varianza muestral"
+  ) +
+
+  theme_minimal()
+
+grid.arrange(g1, g2, nrow = 1)
+
+```
+
+
+```{r}
+# HISTOGRAMA Y DENSIDAD TEÓRICA
+
+
+n <- 10000
+
+muestra <- rbeta(n,
+                 shape1 = alpha,
+                 shape2 = beta)
+
+datos <- data.frame(x = muestra)
+
+ggplot(datos,
+       aes(x = x)) +
+
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 40,
+    fill = "skyblue",
+    color = "black"
+  ) +
+
+  stat_function(
+    fun = dbeta,
+    args = list(
+      shape1 = alpha,
+      shape2 = beta
+    ),
+    color = "red",
+    linewidth = 1.2
+  ) +
+
+  labs(
+    title = "Histograma de Beta(2,5)",
+    subtitle = "PDF teórica superpuesta",
+    x = "x",
+    y = "Densidad"
+  ) +
+
+  theme_minimal()
+```
+
+
+```{r}
+
+# TEOREMA CENTRAL DEL LÍMITE
+# DISTRIBUCIÓN BETA(2,5)
+
+
+set.seed(123)
+
+alpha <- 2
+beta <- 5
+
+mu <- alpha/(alpha+beta)
+
+sigma <- sqrt(
+  (alpha*beta) /
+  (((alpha+beta)^2)*(alpha+beta+1))
+)
+
+# tamaños de muestra
+n_tcl <- c(10, 30, 50, 100, 500)
+
+# número de réplicas
+B <- 5000
+
+par(mfrow = c(2,3))
+
+for(n in n_tcl){
+
+  Z <- numeric(B)
+
+  for(i in 1:B){
+
+    muestra <- rbeta(
+      n,
+      shape1 = alpha,
+      shape2 = beta
+    )
+
+    media <- mean(muestra)
+
+    Z[i] <- (media - mu)/
+      (sigma/sqrt(n))
+  }
+
+  hist(
+    Z,
+    probability = TRUE,
+    breaks = 30,
+    main = paste("n =",n),
+    xlab = "Z",
+    col = "lightgray"
+  )
+
+  curve(
+    dnorm(x),
+    add = TRUE,
+    col = "red",
+    lwd = 2
+  )
+
+  cat("\n")
+  cat("========================\n")
+  cat("n =",n,"\n")
+  cat("Media(Z) =", mean(Z), "\n")
+  cat("Var(Z) =", var(Z), "\n")
+}
+
+```
+
+
+```{r}
+# QQ-PLOT
+
+
+n <- 500
+B <- 5000
+
+Z <- replicate(B, {
+
+  x <- rbeta(
+    n,
+    shape1 = 2,
+    shape2 = 5
+  )
+
+  (mean(x) - mu)/
+    (sigma/sqrt(n))
+
+})
+
+qqnorm(
+  Z,
+  main = "QQ-Plot TCL para Beta(2,5)"
+)
+
+qqline(
+  Z,
+  col = "red",
+  lwd = 2
+)
+
+
+```
