@@ -1,5 +1,7 @@
 ---
 title: "Distribución Ji-cuadrada"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -28,13 +30,9 @@ library(viridis)
 
 ```
 
-
-
 La distribución ji-cuadrada (también conocida como chi-cuadrada, denotada como $\chi^2$) es una de las distribuciones de probabilidad continuas más importantes en estadística inferencial. Esta distribución surge en diversos contextos, especialmente en pruebas de bondad de ajuste, pruebas de independencia y en la estimación de varianzas poblacionales.
 
-
 ::: {#def-ji_cuadrada}
-
 Una variable aleatoria continua $X$ sigue una distribución ji-cuadrada con $n$ grados de libertad, denotada como $X \sim \chi^2(n)$, si su función de densidad de probabilidad está dada por:
 
 \begin{equation}
@@ -49,10 +47,7 @@ donde:
 - $x > 0$ es el dominio de la variable aleatoria
 - $n > 0$ es el parámetro de grados de libertad
 - $\Gamma(n/2)$ es la función gamma evaluada en $n/2$
-
 :::
-
-
 
 **El parámetro grados de libertad (n)**
 
@@ -72,10 +67,7 @@ $$X = Z_1^2 + Z_2^2 + \cdots + Z_n^2 \sim \chi^2(n)$$
 
 Posteriormente verificaremos esta propiedad por medio de una simulación numérica.
 
-
-
 ## Propiedades de la función de densidad de probabilidad (PDF)
-
 
 Como se indicó previamente, la función de densidad de probabilidad de la distribución ji-cuadrada con $n$ grados de libertad está definida como:
 
@@ -86,7 +78,6 @@ f(x; n) = \begin{cases}
 \end{cases}
 \end{equation}
 
-
 **Propiedades fundamentales**
 
 La distribución $\chi^2$ tiene **dominio** estrictamente positivo: $x \in (0, \infty)$. Esta característica surge naturalmente de su construcción como suma de cuadrados de variables aleatorias normales estándar independientes. Esta función toma valores no negativos en su **imagen**: $f(x) \in [0, \infty)$.
@@ -95,25 +86,24 @@ La distribución $\chi^2$ tiene **dominio** estrictamente positivo: $x \in (0, \
 
 El valor de los grados de libertad $n$ tiene el siguiente efecto en la forma de la distribución:
 
-- **Forma de la distribución**: 
+- **Forma de la distribución**:
 
   - Para $n = 1$: Forma de "J" invertida (asimetría extrema hacia la derecha)
   - Para $n = 2$: Distribución exponencial
   - Para $n > 2$: Distribución unimodal con sesgo hacia la derecha
   - Para $n$ grande: Se aproxima a una distribución normal
 
-
 **Comportamiento en los extremos**
 
 El comportamiento de la PDF en los extremos depende crucialmente del parámetro n:
 
-- **Límite en $x \to 0$**:
+- **Límite en** $x \to 0$:
 
   - Para n = 1: $\lim_{x \to 0} f(x) = \infty$
   - Para n = 2: $f(0) = 0.5$
-  - Para n > 2: $\lim_{x \to 0} f(x) = 0$
+  - Para n \> 2: $\lim_{x \to 0} f(x) = 0$
 
-**Límite en $x \to \infty$**: Para todos los valores de n, $\lim_{x \to \infty} f(x) = 0$ debido al factor exponencial $e^{-x/2}$
+**Límite en** $x \to \infty$: Para todos los valores de n, $\lim_{x \to \infty} f(x) = 0$ debido al factor exponencial $e^{-x/2}$
 
 ### Visualización de la PDF para diferentes valores de n
 
@@ -152,7 +142,6 @@ graf_param <- ggplot(df_pdf, aes(x = x, y = densidad, color = n_factor)) +
 
 ggplotly(graf_param)
 ```
-
 
 **Análisis de casos particulares**
 
@@ -212,12 +201,11 @@ print(p_casos)
 
 **Interpretación**
 
-**$n=1$**: La distribución presenta forma de "J invertida", monótonamente decreciente. Es la más sesgada de la familia, con varianza máxima relativa a la media.
+$n=1$: La distribución presenta forma de "J invertida", monótonamente decreciente. Es la más sesgada de la familia, con varianza máxima relativa a la media.
 
-**$n = 2$**: Adopta forma exponencial $f(x) = \frac{1}{2}e^{-x/2}$. Es el único caso donde la función alcanza un valor finito en el origen.
+$n = 2$: Adopta forma exponencial $f(x) = \frac{1}{2}e^{-x/2}$. Es el único caso donde la función alcanza un valor finito en el origen.
 
-**$n\geq 3$**: Desarrolla forma unimodal con moda en $x = n - 2$. La distribución se vuelve progresivamente más simétrica conforme aumenta n.
-
+$n\geq 3$: Desarrolla forma unimodal con moda en $x = n - 2$. La distribución se vuelve progresivamente más simétrica conforme aumenta n.
 
 ### Aproximación normal para $n$ grandes
 
@@ -272,10 +260,9 @@ grid.arrange(grobs = plots_normal, ncol = 2,
 
 La aproximación normal es considerada adecuada cuando:
 
-- **$n\geq 30$**: Aproximación general aceptable
-- **$n\geq 50$**: Aproximación muy precisa
-- **$n\geq 100$**: Prácticamente indistinguible de la normal
-
+- $n\geq 30$: Aproximación general aceptable
+- $n\geq 50$: Aproximación muy precisa
+- $n\geq 100$: Prácticamente indistinguible de la normal
 
 ### Aditividad
 
@@ -293,8 +280,6 @@ La distribución ji-cuadrada mantiene relaciones importantes con otras distribuc
 - **Distribución Normal**: Para n grande, $\chi^2(n) \approx N(n, 2n)$
 - **Distribución Exponencial**: $\chi^2(2) \equiv \text{Exponencial}(1/2)$
 
-
-
 ## Propiedades de la CDF
 
 La función de distribución acumulativa de la distribución ji-cuadrada con $n$ grados de libertad está definida como:
@@ -302,9 +287,6 @@ La función de distribución acumulativa de la distribución ji-cuadrada con $n$
 \begin{equation}
 F(x) = \frac{1}{\Gamma(n/2)} \int_0^{x}\left(\frac{1}{2}\right)^{n/2} u^{n/2-1} e^{-u/2} du \quad \text{para } x > 0
 \end{equation}
-
-
-
 
 **Propiedades generales**
 
@@ -320,9 +302,9 @@ La CDF ji-cuadrada satisface todas las propiedades de una función de distribuci
 
 **Comportamiento en los extremos.** El comportamiento de la CDF en los extremos proporciona información valiosa sobre las características de la distribución:
 
-- **Para $x \to 0$**: $F(x) \to 0$, independientemente del valor de $n$
-- **Para $x \to \infty$**: $F(x) \to 1$, convergencia que es más rápida para valores pequeños de $n$
-- **En $x = 0$**: $F(0) = 0$ exactamente
+- **Para** $x \to 0$: $F(x) \to 0$, independientemente del valor de $n$
+- **Para** $x \to \infty$: $F(x) \to 1$, convergencia que es más rápida para valores pequeños de $n$
+- **En** $x = 0$: $F(0) = 0$ exactamente
 
 ```{r}
 #| label: cdf-propiedades-basicas
@@ -375,7 +357,6 @@ ggplotly(p_cdf_basico)
 
 ### Análisis por grados de libertad
 
-
 ```{r}
 #| label: casos-especiales-cdf
 #| fig-cap: "Comportamiento especial de la CDF para n = 1,2,3,4"
@@ -416,7 +397,6 @@ p_especiales <- ggplot() +
 print(p_especiales)
 ```
 
-
 **Interpretación de casos especiales**
 
 **n = 1**: La CDF crece rápidamente desde 0, reflejando la alta concentración de probabilidad cerca del origen que caracteriza la distribución con forma "J invertida".
@@ -425,16 +405,13 @@ print(p_especiales)
 
 **n ≥ 3**: La CDF muestra una forma sigmoidal más pronunciada, con un punto de inflexión que se desplaza hacia la derecha conforme aumenta $n$.
 
-
 ## Relación entre PDF y CDF
-
 
 La relación entre la función de densidad de probabilidad (PDF) y la función de distribución acumulativa (CDF) está dada por:
 
 $$F'(x) = f(x) \quad \text{y} \quad F(x) = \int_{-\infty}^x f(u) du$$
 
-Para la distribución ji-cuadrada:
-$$F(x) = \int_0^x f(u) du = \int_0^x \frac{1}{\Gamma(n/2)} \left(\frac{1}{2}\right)^{n/2} u^{n/2-1} e^{-u/2} du$$
+Para la distribución ji-cuadrada: $$F(x) = \int_0^x f(u) du = \int_0^x \frac{1}{\Gamma(n/2)} \left(\frac{1}{2}\right)^{n/2} u^{n/2-1} e^{-u/2} du$$
 
 ```{r}
 #| label: pdf-cdf-relacion
@@ -489,7 +466,6 @@ print(p_relacion)
 
 
 ```
-
 
 ## Medidas Descriptivas
 
@@ -585,7 +561,6 @@ p_distribuciones_media <- ggplot() +
 print(p_distribuciones_media)
 ```
 
-
 ### Moda
 
 La moda de la distribución ji-cuadrada depende del valor de los grados de libertad:
@@ -606,7 +581,7 @@ La moda de la distribución ji-cuadrada presenta un comportamiento diferenciado 
 
 - **n = 1**: No existe moda en sentido estricto (función monótonamente decreciente)
 - **n = 2**: Moda en x = 0
-- **n > 2**: Moda = n - 2 (relación lineal)
+- **n \> 2**: Moda = n - 2 (relación lineal)
 
 ```{r}
 #| label: evolucion-moda
@@ -720,8 +695,6 @@ p_casos_moda <- ggplot() +
 print(p_casos_moda)
 ```
 
-
-
 ### Varianza
 
 La varianza de la distribución ji-cuadrada está dada por:
@@ -733,7 +706,6 @@ La desviación estándar correspondiente es:
 $$\sigma = \sqrt{2n}$$
 
 Esta relación lineal entre la varianza y los grados de libertad indica que la dispersión de la distribución crece proporcionalmente con n.
-
 
 **Comportamiento teórico**
 
@@ -789,8 +761,7 @@ print(p_var_desv)
 
 ### Coeficiente de variación
 
-El coeficiente de variación (CV) mide la dispersión relativa y está dado por:
-$$CV = \frac{\sigma}{\mu} = \frac{\sqrt{2n}}{n} = \sqrt{\frac{2}{n}}$$
+El coeficiente de variación (CV) mide la dispersión relativa y está dado por: $$CV = \frac{\sigma}{\mu} = \frac{\sqrt{2n}}{n} = \sqrt{\frac{2}{n}}$$
 
 ```{r}
 #| label: coeficiente-variacion
@@ -824,33 +795,178 @@ p_cv <- ggplot(df_varianza, aes(x = n, y = coef_variacion)) +
 print(p_cv)
 ```
 
-
-
 ## Ejercicios propuestos
 
 ::: {#exr-simulaciones}
-
 Genera muestras aleatorias de diferentes tamaños desde 100 hasta 10000 observaciones para las distribuciones ji-cuadrada con n = 5, 20 y 50 grados de libertad. En casa caso:
 
-1. Genera una gráfica de convergencia de la media muestral hacia la media teórica a medida que aumenta el tamaño de la muestra.
+1.  Genera una gráfica de convergencia de la media muestral hacia la media teórica a medida que aumenta el tamaño de la muestra.
 
-2. Genera una gráfica de convergencia de la varianza muestral hacia la varianza teórica a medida que aumenta el tamaño de la muestra.
+2.  Genera una gráfica de convergencia de la varianza muestral hacia la varianza teórica a medida que aumenta el tamaño de la muestra.
 
-3. Para el tamaño de muestra más grande, genera un histograma de la muestra junto con la función de densidad teórica superpuesta.
-
+3.  Para el tamaño de muestra más grande, genera un histograma de la muestra junto con la función de densidad teórica superpuesta.
 :::
+```{r}
+library(ggplot2)
+library(gridExtra)
+set.seed(123)
+# Grados de libertad
+dfs <- c(5, 20, 50)
 
+# Tamaños de muestra
+n_values <- seq(100, 10000, by = 100)
+#1
+for(df in dfs){
+
+  media_teorica <- df
+  var_teorica <- 2*df
+
+  medias_muestrales <- numeric(length(n_values))
+  varianzas_muestrales <- numeric(length(n_values))
+
+  for(i in seq_along(n_values)){
+
+    n <- n_values[i]
+
+    muestra <- rchisq(n, df = df)
+
+    medias_muestrales[i] <- mean(muestra)
+    varianzas_muestrales[i] <- var(muestra)
+  }
+
+  datos_media <- data.frame(
+    n = n_values,
+    Media = medias_muestrales
+  )
+
+  datos_var <- data.frame(
+    n = n_values,
+    Varianza = varianzas_muestrales
+  )
+
+  # Convergencia de la media
+  p1 <- ggplot(datos_media,
+              aes(x = n, y = Media)) +
+    geom_line(color = "blue") +
+    geom_hline(yintercept = media_teorica,
+               color = "red",
+               linetype = "dashed",
+               linewidth = 1) +
+    labs(
+      title = paste("Convergencia de la media - Chi-cuadrada(",df,")"),
+      x = "Tamaño de muestra",
+      y = "Media muestral"
+    ) +
+    theme_minimal()
+#Convergencia de la varianza
+ p2 <- ggplot(datos_var,
+              aes(x = n, y = Varianza)) +
+    geom_line(color = "darkgreen") +
+    geom_hline(yintercept = var_teorica,
+               color = "red",
+               linetype = "dashed",
+               linewidth = 1) +
+    labs(
+      title = paste("Convergencia de la varianza - Chi-cuadrada(",df,")"),
+      x = "Tamaño de muestra",
+      y = "Varianza muestral"
+    ) +
+    theme_minimal()
+
+  grid.arrange(p1, p2, nrow = 1)
+
+}  
+#Histograma
+n_grande <- 10000
+
+for(df in dfs){
+
+  muestra <- rchisq(n_grande, df)
+
+  hist_df <- data.frame(x = muestra)
+
+  p <- ggplot(hist_df, aes(x = x)) +
+    geom_histogram(aes(y = after_stat(density)),
+                   bins = 50,
+                   fill = "skyblue",
+                   color = "black") +
+    stat_function(
+      fun = dchisq,
+      args = list(df = df),
+      color = "red",
+      linewidth = 1.2
+    ) +
+    labs(
+      title = paste("Histograma y densidad teórica - Chi-cuadrada(",df,")"),
+      x = "x",
+      y = "Densidad"
+    ) +
+    theme_minimal()
+
+  print(p)
+}
+
+```
 
 ::: {#exr-tcl_ji}
-
 Para diferentes tamaños de muestra verifica numéricamente el Teorema Central del Límite aplicado a la distribución ji-cuadrada, elige cualquier valor de los grados de libertad.
-
 :::
+```{r}
+set.seed(123)
+
+df <- 5
+
+mu <- df
+sigma <- sqrt(2*df)
+
+n_tcl <- c(10, 30, 50, 100, 500)
+
+B <- 5000
+
+par(mfrow = c(2,3))
+
+for(n in n_tcl){
+
+  Z <- numeric(B)
+
+  for(i in 1:B){
+
+    x <- rchisq(n, df)
+
+    xbar <- mean(x)
+
+    Z[i] <- (xbar - mu)/(sigma/sqrt(n))
+  }
+
+  hist(Z,
+       probability = TRUE,
+       breaks = 30,
+       main = paste("n =", n),
+       xlab = "Z")
+
+  curve(dnorm(x),
+        add = TRUE,
+        col = "red",
+        lwd = 2)
+
+  cat("\n")
+  cat("====================================\n")
+  cat("n =", n, "\n")
+  cat("Media(Z) =", mean(Z), "\n")
+  cat("Var(Z) =", var(Z), "\n")
+}
+
+
+
+
+
+
+```
+
+
 
 ::: {#exr-suma_normal_cuadrada}
-
 Mediante simulaciones numéricas, verifica la propiedad de aditividad de la distribución ji-cuadrada sumando variables aleatorias normales estándar elevadas al cuadrado. Compara los resultados con la distribución ji-cuadrada teórica.
-
 
 ```{r}
 N <- 10000
@@ -910,15 +1026,9 @@ ggplot(data_var) +
         plot.subtitle = element_text(hjust = 0.5))
 
 ```
-
-
-
-
-
 :::
 
 ::: {#exr-aproximacion_normal}
-
 Mediante simulaciones numéricas, verifica la aproximación normal de la distribución ji-cuadrada para diferentes valores de n (por ejemplo, n = 10, 30, 50, 100). Compara las distribuciones muestrales con la normal teórica.
 
 ```{r}
@@ -963,16 +1073,32 @@ for (i in seq_along(n_grandes)) {
 grid.arrange(grobs = plots_normal, ncol = 2, 
              top = "Aproximación Normal: χ²(n) ≈ N(n, 2n)")
 ```
-
-
-
-
-
 :::
 
 ::: {#exr-suma_ji}
-
 Por medio de simulaciones numéricas, verifica la propiedad de aditividad de la distribución ji-cuadrada sumando dos variables aleatorias ji-cuadrada independientes. Compara los resultados con la distribución ji-cuadrada teórica.
-
 :::
+```{r}
+library(ggplot2)
 
+set.seed(123)
+
+# Parámetros
+nu1 <- 5
+nu2 <- 10
+nu_total <- nu1 + nu2
+# Número de simulaciones
+N <- 100000
+
+# Generación de variables independientes
+X <- rchisq(N, df = nu1)
+Y <- rchisq(N, df = nu2)
+
+# Suma
+Z <- X + Y
+#Histograma
+datos <- data.frame(Z)
+
+ggplot(datos, aes(x = Z)) + geom_histogram(aes(y = after_stat(density)),bins = 60, fill = "skyblue",color = "black") +stat_function(fun = dchisq,args = list(df = nu_total),color = "red",linewidth = 1.2) +labs(title = paste("Suma de Chi-cuadrada(",nu1, ") + Chi-cuadrada(",nu2, ")" ),subtitle = paste( "Comparación con Chi-cuadrada(",nu_total, ") teórica" ),x = "z",y = "Densidad") +theme_minimal()
+
+```
