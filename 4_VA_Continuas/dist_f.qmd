@@ -569,3 +569,140 @@ b)  Si $X \sim F(a,b)$ entonces $\frac{1}{X} \sim F(b,a)$.
 
 c)  Si $X \sim \chi^2(a)$ y $Y \sim \chi^2(b)$ son independientes, entonces $\frac{X/a}{Y/b} \sim F(a,b)$.
 :::
+
+```{r}
+
+# PROPIEDAD 1:
+# Si X ~ t(n), entonces X² ~ F(1,n)
+
+
+library(ggplot2)
+
+set.seed(123)
+
+N <- 100000
+n <- 10
+
+# Simulación de la t
+X <- rt(N, df = n)
+
+# Transformación
+Y <- X^2
+
+datos <- data.frame(Y)
+
+ggplot(datos, aes(x = Y)) +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 80,
+    fill = "skyblue",
+    color = "black"
+  ) +
+  stat_function(
+    fun = df,
+    args = list(df1 = 1, df2 = n),
+    color = "red",
+    linewidth = 1.2
+  ) +
+  coord_cartesian(xlim = c(0, 10)) +
+  labs(
+    title = expression(X^2~"vs F(1,n)"),
+    subtitle = paste("n =", n),
+    x = "x",
+    y = "Densidad"
+  ) +
+  theme_minimal()
+
+# PROPIEDAD 2:
+# Si X ~ F(a,b), entonces 1/X ~ F(b,a)
+
+set.seed(123)
+
+N <- 100000
+
+a <- 5
+b <- 10
+
+X <- rf(N, df1 = a, df2 = b)
+
+Y <- 1/X
+
+datos <- data.frame(Y)
+
+ggplot(datos, aes(x = Y)) +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 80,
+    fill = "lightgreen",
+    color = "black"
+  ) +
+  stat_function(
+    fun = df,
+    args = list(df1 = b, df2 = a),
+    color = "red",
+    linewidth = 1.2
+  ) +
+  coord_cartesian(xlim = c(0,8)) +
+  labs(
+    title = expression("Distribución de"~~1/X),
+    subtitle = paste(
+      "Comparación con F(", b, ",", a, ")"
+    ),
+    x = "y",
+    y = "Densidad"
+  ) +
+  theme_minimal()
+
+# PROPIEDAD 3:
+# (X/a)/(Y/b) ~ F(a,b)
+
+
+set.seed(123)
+
+N <- 100000
+
+a <- 5
+b <- 12
+
+X <- rchisq(N, df = a)
+Y <- rchisq(N, df = b)
+
+F_sim <- (X/a)/(Y/b)
+
+datos <- data.frame(F_sim)
+
+ggplot(datos, aes(x = F_sim)) +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 80,
+    fill = "orange",
+    color = "black"
+  ) +
+  stat_function(
+    fun = df,
+    args = list(df1 = a, df2 = b),
+    color = "red",
+    linewidth = 1.2
+  ) +
+  coord_cartesian(xlim = c(0, 6)) +
+  labs(
+    title = expression(frac(X/a,Y/b)),
+    subtitle = paste(
+      "Comparación con F(",
+      a,",",b,")"
+    ),
+    x = "f",
+    y = "Densidad"
+  ) +
+  theme_minimal()
+
+# Media teórica de F(a,b)
+# válida para b > 2
+
+media_teorica <- b/(b-2)
+
+media_simulada <- mean(F_sim)
+
+cat("Media simulada :", media_simulada, "\n")
+cat("Media teórica  :", media_teorica, "\n")
+```
