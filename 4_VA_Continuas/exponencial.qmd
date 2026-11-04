@@ -1,5 +1,7 @@
 ---
 title: "Distribución Exponencial"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -1021,6 +1023,7 @@ Genera una simulación con tamaños de muestra de 10, 50, 100, 500 y 1000 observ
 2.  Compara estos estadísticos con los valores teóricos.
 3.  Grafica la distribución de las muestras junto con la densidad teórica.
 :::
+
 ```{r}
 
 # DISTRIBUCIÓN EXPONENCIAL Exp(lambda = 0.8)
@@ -1046,7 +1049,7 @@ varianza_teorica <- 1/(lambda^2)
 mediana_teorica <- log(2)/lambda
 
 cat("VALORES TEÓRICOS\n")
-cat("-------------------------\n")
+cat("\n")
 cat("Media =", media_teorica, "\n")
 cat("Varianza =", varianza_teorica, "\n")
 cat("Mediana =", mediana_teorica, "\n\n")
@@ -1093,7 +1096,7 @@ for(n in n_values){
     geom_histogram(
       aes(y = after_stat(density)),
       bins = 30,
-      fill = "skyblue",
+      fill = "lightpink",
       color = "black"
     ) +
 
@@ -1133,6 +1136,3 @@ cat("Media =", round(media_teorica,4), "\n")
 cat("Varianza =", round(varianza_teorica,4), "\n")
 cat("Mediana =", round(mediana_teorica,4), "\n")
 ```
-
-
-
