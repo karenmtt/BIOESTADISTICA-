@@ -1,5 +1,7 @@
 ---
 title: "Distribución Hipergeométrica"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -10,5 +12,255 @@ text-align: justify}
 </style>
 ```
 
-
 Desarrollar como en la demás distribuciones, incluyendo la función de probabilidad, gráficas considerando el cambio en los parámetros de la distribución. Características de la distribución (media y varianza). Un ejemplo con valores simulados y la verificación del teorema central del límite. Tomar como referencia principal el libro Introducción a la Probabilidad de Luis Rincón, páginas 243-247.
+
+```{r}
+# Distribución de Poisson
+
+# Parámetro lambda
+lambda <- 7
+
+# Valores posibles de X
+x <- 0:20
+
+# Calcular probabilidades
+probabilidades <- dpois(x, lambda)
+
+# Crear tabla de probabilidades
+tabla_poisson <- data.frame(
+  Eventos = x,
+  Probabilidad = probabilidades
+)
+
+# Mostrar resultados
+print(tabla_poisson)
+
+# Gráfica de la función de probabilidad
+barplot(
+  probabilidades,
+  names.arg = x,
+  col = "pink",
+  main = "Distribución de Poisson (lambda = 7)",
+  xlab = "Número de eventos (x)",
+  ylab = "P(X = x)"
+)
+```
+
+```{r}
+# Valores del parámetro lambda
+lambdas <- c(2, 5, 7, 12)
+
+# Configuración de las gráficas
+par(mfrow = c(2, 2))
+
+for (l in lambdas) {
+
+  x <- 0:(l + 4 * sqrt(l) + 5)
+
+  probabilidades <- dpois(x, l)
+
+  barplot(
+    probabilidades,
+    names.arg = x,
+    col = "yellow",
+    border = "green",
+    main = paste("Poisson lambda =", l),
+    xlab = "Número de eventos",
+    ylab = "Probabilidad"
+  )
+}
+
+# Restaurar configuración
+par(mfrow = c(1, 1))
+```
+
+```{r}
+# Parámetro de Poisson
+lambda <- 7
+
+# Simulación de 500 observaciones
+set.seed(123)
+
+datos <- rpois(n = 500, lambda = lambda)
+
+# Mostrar primeras observaciones
+head(datos, 10)
+
+# Media y varianza teóricas
+media_teorica <- lambda
+varianza_teorica <- lambda
+
+# Media y varianza muestrales
+media_muestral <- mean(datos)
+varianza_muestral <- var(datos)
+
+# Tabla comparativa
+resultados <- data.frame(
+  Caracteristica = c("Media", "Varianza"),
+  Teorica = c(media_teorica, varianza_teorica),
+  Muestral = c(media_muestral, varianza_muestral)
+)
+
+print(resultados)
+
+```
+
+```{r}
+# Frecuencias relativas
+frecuencias <- table(datos) / length(datos)
+
+# Valores de X
+x <- as.numeric(names(frecuencias))
+
+# Gráfica de frecuencias simuladas
+barplot(
+  frecuencias,
+  names.arg = x,
+  col = "purple",
+  main = "Simulación de la distribución de Poisson",
+  xlab = "Número de eventos",
+  ylab = "Frecuencia relativa"
+)
+
+# Superponer probabilidades teóricas
+points(
+  x = seq_along(x) + 0.5,
+  y = dpois(x, lambda),
+  col = "deeppink",
+  pch = 19
+)
+
+legend(
+  "topright",
+  legend = c("Frecuencia simulada", "Probabilidad teórica"),
+  fill = c("purple", NA),
+  border = NA,
+  col = c(NA, "deeppink"),
+  pch = c(NA, 19)
+)
+```
+
+```{r}
+# Verificación del teorema central del límite
+
+set.seed(123)
+
+# Parámetro de Poisson
+lambda <- 7
+
+# Tamaños de muestra
+tamanos <- c(1, 2, 5, 10, 30, 50, 100)
+
+# Número de repeticiones
+B <- 5000
+
+# Configuración de gráficas
+par(mfrow = c(2, 2))
+
+for (n in tamanos[c(1, 3, 5, 7)]) {
+
+  # Simular medias muestrales
+  medias <- replicate(
+    B,
+    mean(rpois(n, lambda))
+  )
+
+  # Estandarizar las medias
+  Z <- (medias - lambda) / sqrt(lambda / n)
+
+  # Histograma
+  hist(
+    Z,
+    probability = TRUE,
+    breaks = 30,
+    col = "lightblue",
+    border = "white",
+    main = paste("TCL: tamaño de muestra n =", n),
+    xlab = "Valores de Z",
+    ylab = "Densidad"
+  )
+
+  # Curva de distribución normal estándar
+  curve(
+    dnorm(x, mean = 0, sd = 1),
+    add = TRUE,
+    col = "red",
+    lwd = 2
+  )
+}
+
+par(mfrow = c(1, 1))
+
+```
+
+```{r}
+set.seed(123)
+
+par(mfrow = c(2, 2))
+
+for (n in c(1, 5, 30, 100)) {
+
+  medias <- replicate(
+    5000,
+    mean(rpois(n, lambda = 7))
+  )
+
+  Z <- (medias - 7) / sqrt(7 / n)
+
+  qqnorm(
+    Z,
+    main = paste("Gráfica Q-Q, n =", n),
+    col = "blue"
+  )
+
+  qqline(Z, col = "red", lwd = 2)
+}
+
+par(mfrow = c(1, 1))
+
+
+```
+
+```{r}
+set.seed(123)
+
+lambda <- 7
+
+tamanos <- c(1, 2, 5, 10, 30, 50, 100)
+
+B <- 10000
+
+# Probabilidad teórica normal estándar
+probabilidad_teorica <- pnorm(1.96) - pnorm(-1.96)
+
+# Crear tabla de resultados
+resultados_TCL <- data.frame()
+
+for (n in tamanos) {
+
+  medias <- replicate(
+    B,
+    mean(rpois(n, lambda))
+  )
+
+  Z <- (medias - lambda) / sqrt(lambda / n)
+
+  # Proporción dentro del intervalo
+  proporcion <- mean(Z >= -1.96 & Z <= 1.96)
+
+  resultados_TCL <- rbind(
+    resultados_TCL,
+    data.frame(
+      Tamano_muestra = n,
+      Media_Z = mean(Z),
+      Varianza_Z = var(Z),
+      Proporcion = proporcion,
+      Probabilidad_normal = probabilidad_teorica
+    )
+  )
+}
+
+print(resultados_TCL)
+
+```
+
