@@ -1,5 +1,7 @@
 ---
 title: "Distribución F"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
