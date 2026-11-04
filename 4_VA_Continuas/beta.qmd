@@ -1,5 +1,7 @@
 ---
 title: "Distribución Beta"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -1205,6 +1207,7 @@ Genera muestras de diferentes tamaños desde 100 hasta 10000 de una distribució
 
 Para diferentes tamaños de muestra verifica el Teorema Central del Límite (TCL) utilizando la distribución beta(2,5).
 :::
+
 ```{r}
 # DISTRIBUCIÓN BETA(2,5)
 # CONVERGENCIA DE MEDIA Y VARIANZA
@@ -1287,7 +1290,7 @@ g2 <- ggplot(datos_var,
              aes(x = n,
                  y = varianza)) +
 
-  geom_line(color = "darkgreen") +
+  geom_line(color = "deeppink") +
 
   geom_hline(yintercept = var_teorica,
              color = "red",
@@ -1306,7 +1309,6 @@ g2 <- ggplot(datos_var,
 grid.arrange(g1, g2, nrow = 1)
 
 ```
-
 
 ```{r}
 # HISTOGRAMA Y DENSIDAD TEÓRICA
@@ -1348,8 +1350,8 @@ ggplot(datos,
   ) +
 
   theme_minimal()
-```
 
+```
 
 ```{r}
 
@@ -1401,7 +1403,7 @@ for(n in n_tcl){
     breaks = 30,
     main = paste("n =",n),
     xlab = "Z",
-    col = "lightgray"
+    col = "lightpink"
   )
 
   curve(
@@ -1412,14 +1414,13 @@ for(n in n_tcl){
   )
 
   cat("\n")
-  cat("========================\n")
+  cat("\n")
   cat("n =",n,"\n")
   cat("Media(Z) =", mean(Z), "\n")
   cat("Var(Z) =", var(Z), "\n")
 }
 
 ```
-
 
 ```{r}
 # QQ-PLOT
