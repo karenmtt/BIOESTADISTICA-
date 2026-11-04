@@ -1,5 +1,7 @@
 ---
 title: "Distribución Weibull"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -29,3 +31,467 @@ library(viridis)
 ```
 
 Desarrollar como en la demás distribuciones, incluyendo la función de probabilidad y la función de distribución, gráficas considerando el cambio en los parámetros de la distribución. Características de la distribución (media, varianza, moda, cv). Un ejemplo con valores simulados y la verificación del teorema central del límite. Tomar como referencia principal el libro Introducción a la Probabilidad de Luis Rincón, páginas 278-281.
+```{r}
+# Distribución Weibull
+
+# Parámetros
+alpha <- 5
+beta <- 2
+
+# Valores de X
+x <- seq(0, 15, length.out = 500)
+
+# Función de densidad
+densidad <- dweibull(x, shape = beta, scale = alpha)
+
+# Función de distribución acumulada
+distribucion <- pweibull(x, shape = beta, scale = alpha)
+
+# Gráficas
+par(mfrow = c(1, 2))
+
+plot(
+  x, densidad,
+  type = "l",
+  col = "blue",
+  lwd = 2,
+  main = "Función de densidad Weibull",
+  xlab = "x",
+  ylab = "f(x)"
+)
+
+plot(
+  x, distribucion,
+  type = "l",
+  col = "red",
+  lwd = 2,
+  main = "Función de distribución Weibull",
+  xlab = "x",
+  ylab = "F(x)"
+)
+
+par(mfrow = c(1, 1))
+
+```
+
+```{r}
+# Cambio del parámetro de escala
+
+x <- seq(0, 20, length.out = 500)
+
+escalas <- c(2, 4, 6, 8)
+
+colores <- c("blue", "red", "green", "purple")
+
+plot(
+  x, dweibull(x, shape = 2, scale = 2),
+  type = "l",
+  col = colores[1],
+  lwd = 2,
+  ylim = c(0, 0.5),
+  main = "Weibull: cambio en escala",
+  xlab = "x",
+  ylab = "Densidad"
+)
+
+for (i in 2:length(escalas)) {
+  lines(
+    x,
+    dweibull(x, shape = 2, scale = escalas[i]),
+    col = colores[i],
+    lwd = 2
+  )
+}
+
+legend(
+  "topright",
+  legend = paste("Escala =", escalas),
+  col = colores,
+  lwd = 2
+)
+
+```
+
+
+```{r}
+# Cambio del parámetro de forma
+
+x <- seq(0.001, 15, length.out = 500)
+
+formas <- c(0.5, 1, 2, 4)
+
+colores <- c("blue", "red", "green", "purple")
+
+plot(
+  x,
+  dweibull(x, shape = formas[1], scale = 5),
+  type = "l",
+  col = colores[1],
+  lwd = 2,
+  ylim = c(0, 0.6),
+  main = "Weibull: cambio en forma",
+  xlab = "x",
+  ylab = "Densidad"
+)
+
+for (i in 2:length(formas)) {
+  lines(
+    x,
+    dweibull(x, shape = formas[i], scale = 5),
+    col = colores[i],
+    lwd = 2
+  )
+}
+
+legend(
+  "topright",
+  legend = paste("Forma =", formas),
+  col = colores,
+  lwd = 2
+)
+
+
+```
+
+```{r}
+# Comparación de funciones acumuladas
+
+x <- seq(0, 20, length.out = 500)
+
+plot(
+  x,
+  pweibull(x, shape = 2, scale = 2),
+  type = "l",
+  col = "blue",
+  lwd = 2,
+  ylim = c(0, 1),
+  main = "Función acumulada Weibull",
+  xlab = "x",
+  ylab = "F(x)"
+)
+
+lines(
+  x, pweibull(x, shape = 2, scale = 4),
+  col = "red", lwd = 2
+)
+
+lines(
+  x, pweibull(x, shape = 2, scale = 6),
+  col = "green", lwd = 2
+)
+
+lines(
+  x, pweibull(x, shape = 2, scale = 8),
+  col = "purple", lwd = 2
+)
+
+legend(
+  "bottomright",
+  legend = c("Escala 2", "Escala 4", "Escala 6", "Escala 8"),
+  col = c("blue", "red", "green", "purple"),
+  lwd = 2
+)
+
+```
+
+
+
+```{r}
+# Parámetros Weibull
+alpha <- 5
+beta <- 2
+
+# Media
+media <- alpha * gamma(1 + 1/beta)
+
+# Varianza
+varianza <- alpha^2 * (
+  gamma(1 + 2/beta) -
+  (gamma(1 + 1/beta))^2
+)
+
+# Desviación estándar
+desviacion <- sqrt(varianza)
+
+# Moda
+if (beta > 1) {
+  moda <- alpha * ((beta - 1)/beta)^(1/beta)
+} else {
+  moda <- 0
+}
+
+# Coeficiente de variación
+cv <- desviacion / media
+
+# Tabla de resultados
+caracteristicas <- data.frame(
+  Caracteristica = c(
+    "Media",
+    "Varianza",
+    "Desviacion estandar",
+    "Moda",
+    "Coeficiente de variacion"
+  ),
+  Valor = c(
+    media,
+    varianza,
+    desviacion,
+    moda,
+    cv
+  )
+)
+
+print(caracteristicas)
+
+
+```
+
+
+```{r}
+# Simulación de datos Weibull
+
+set.seed(123)
+
+# Parámetros
+alpha <- 5
+beta <- 2
+
+# Generar 1000 observaciones
+datos <- rweibull(
+  n = 1000,
+  shape = beta,
+  scale = alpha
+)
+
+# Mostrar primeras 10 observaciones
+head(datos, 10)
+
+# Estadísticos descriptivos
+media_simulada <- mean(datos)
+varianza_simulada <- var(datos)
+desviacion_simulada <- sd(datos)
+moda_teorica <- alpha * ((beta - 1)/beta)^(1/beta)
+cv_simulado <- desviacion_simulada / media_simulada
+
+# Resultados
+resultados <- data.frame(
+  Caracteristica = c(
+    "Media",
+    "Varianza",
+    "Desviacion estandar",
+    "Moda teorica",
+    "Coeficiente de variacion"
+  ),
+  Valor = c(
+    media_simulada,
+    varianza_simulada,
+    desviacion_simulada,
+    moda_teorica,
+    cv_simulado
+  )
+)
+
+print(resultados)
+
+
+# Histograma de los datos simulados
+
+hist(
+  datos,
+  probability = TRUE,
+  breaks = 30,
+  col = "lightblue",
+  border = "white",
+  main = "Datos simulados de una distribución Weibull",
+  xlab = "Valores de X",
+  ylab = "Densidad"
+)
+
+# Agregar densidad teórica
+curve(
+  dweibull(x, shape = beta, scale = alpha),
+  add = TRUE,
+  col = "red",
+  lwd = 2
+)
+
+legend(
+  "topright",
+  legend = c("Densidad teórica"),
+  col = "red",
+  lwd = 2
+)
+
+# Valores teóricos
+
+media_teorica <- alpha * gamma(1 + 1/beta)
+
+varianza_teorica <- alpha^2 * (
+  gamma(1 + 2/beta) -
+  gamma(1 + 1/beta)^2
+)
+
+# Tabla comparativa
+comparacion <- data.frame(
+  Caracteristica = c("Media", "Varianza"),
+  Teorica = c(media_teorica, varianza_teorica),
+  Simulada = c(mean(datos), var(datos))
+)
+
+print(comparacion)
+
+# Verificación del teorema central del límite
+
+set.seed(123)
+
+# Parámetros Weibull
+alpha <- 5
+beta <- 2
+
+# Media teórica
+mu <- alpha * gamma(1 + 1/beta)
+
+# Varianza teórica
+sigma2 <- alpha^2 * (
+  gamma(1 + 2/beta) -
+  gamma(1 + 1/beta)^2
+)
+
+# Desviación estándar
+sigma <- sqrt(sigma2)
+
+# Tamaños de muestra
+tamanos <- c(1, 2, 5, 10, 30, 50, 100)
+
+# Número de simulaciones
+B <- 5000
+
+# Gráficas
+par(mfrow = c(2, 2))
+
+for (n in c(1, 5, 30, 100)) {
+
+  # Generar medias muestrales
+  medias <- replicate(
+    B,
+    mean(rweibull(n, shape = beta, scale = alpha))
+  )
+
+  # Estandarizar
+  Z <- (medias - mu) / (sigma / sqrt(n))
+
+  # Histograma
+  hist(
+    Z,
+    probability = TRUE,
+    breaks = 30,
+    col = "lightblue",
+    border = "white",
+    main = paste("TCL: tamaño de muestra n =", n),
+    xlab = "Valores de Z",
+    ylab = "Densidad"
+  )
+
+  # Curva normal estándar
+  curve(
+    dnorm(x, mean = 0, sd = 1),
+    add = TRUE,
+    col = "red",
+    lwd = 2
+  )
+}
+
+par(mfrow = c(1, 1))
+
+
+set.seed(123)
+
+alpha <- 5
+beta <- 2
+
+mu <- alpha * gamma(1 + 1/beta)
+
+sigma <- sqrt(
+  alpha^2 * (
+    gamma(1 + 2/beta) -
+    gamma(1 + 1/beta)^2
+  )
+)
+
+par(mfrow = c(2, 2))
+
+for (n in c(1, 5, 30, 100)) {
+
+  medias <- replicate(
+    5000,
+    mean(rweibull(n, shape = beta, scale = alpha))
+  )
+
+  Z <- (medias - mu) / (sigma / sqrt(n))
+
+  qqnorm(
+    Z,
+    main = paste("Gráfica Q-Q, n =", n),
+    col = "blue"
+  )
+
+  qqline(Z, col = "red", lwd = 2)
+}
+
+par(mfrow = c(1, 1))
+
+set.seed(123)
+
+# Parámetros
+alpha <- 5
+beta <- 2
+
+# Media y desviación estándar teóricas
+mu <- alpha * gamma(1 + 1/beta)
+
+sigma <- sqrt(
+  alpha^2 * (
+    gamma(1 + 2/beta) -
+    gamma(1 + 1/beta)^2
+  )
+)
+
+# Tamaños de muestra
+tamanos <- c(1, 2, 5, 10, 30, 50, 100)
+
+# Número de repeticiones
+B <- 10000
+
+# Probabilidad normal teórica
+probabilidad_teorica <- pnorm(1.96) - pnorm(-1.96)
+
+# Crear tabla
+resultados_TCL <- data.frame()
+
+for (n in tamanos) {
+
+  medias <- replicate(
+    B,
+    mean(rweibull(n, shape = beta, scale = alpha))
+  )
+
+  Z <- (medias - mu) / (sigma / sqrt(n))
+
+  proporcion <- mean(Z >= -1.96 & Z <= 1.96)
+
+  resultados_TCL <- rbind(
+    resultados_TCL,
+    data.frame(
+      Tamano_muestra = n,
+      Media_Z = mean(Z),
+      Varianza_Z = var(Z),
+      Proporcion = proporcion,
+      Probabilidad_teorica = probabilidad_teorica
+    )
+  )
+}
+
+print(resultados_TCL)
+
+
+```
