@@ -1,5 +1,7 @@
 ---
 title: "Distribución t de Student."
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -544,6 +546,7 @@ en donde $\overline{X}=\frac{1}{n}\sum_{i=1}^n X_i$ y $S^2=\frac{1}{n-1}\sum_{i=
 
 Genera 1000 muestras aleatorias de tamaño 50 de una distribución normal estándar. Para cada muestra calcula la media muestral y la desviación estándar muestral. Luego calcula la variable aleatoria $T$ y compara su histograma con la función de densidad teórica de $t(49)$.
 ::::
+
 ```{r}
 # DISTRIBUCIÓN t DE STUDENT
 # Simulación y verificación de propiedades
@@ -633,7 +636,6 @@ ggplot(datos, aes(x = x)) +
   theme_minimal()
 
 
-# PARTE 2
 # T = X / sqrt(Y/n)
 # X ~ N(0,1)
 # Y ~ Chi-cuadrada(10)
@@ -676,7 +678,6 @@ ggplot(datos_T1, aes(x = T1)) +
   theme_minimal()
 
 
-# PARTE 3
 # Verificación de
 #
 # T = (Xbarra - μ)/(S/sqrt(n))
@@ -732,9 +733,9 @@ ggplot(datos_T2, aes(x = T2)) +
 
 
 cat("\n")
-cat("=======================================\n")
+cat("\n")
 cat("RESUMEN DE RESULTADOS\n")
-cat("=======================================\n")
+cat("\n")
 print(resultados)
 
 cat("\nMedia simulada de T1 =", mean(T1), "\n")
@@ -743,4 +744,3 @@ cat("Varianza simulada de T1 =", var(T1), "\n")
 cat("\nMedia simulada de T2 =", mean(T2), "\n")
 cat("Varianza simulada de T2 =", var(T2), "\n")
 ```
-
