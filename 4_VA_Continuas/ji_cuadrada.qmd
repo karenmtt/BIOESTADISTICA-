@@ -806,6 +806,7 @@ Genera muestras aleatorias de diferentes tamaños desde 100 hasta 10000 observac
 
 3.  Para el tamaño de muestra más grande, genera un histograma de la muestra junto con la función de densidad teórica superpuesta.
 :::
+
 ```{r}
 library(ggplot2)
 library(gridExtra)
@@ -911,6 +912,7 @@ for(df in dfs){
 ::: {#exr-tcl_ji}
 Para diferentes tamaños de muestra verifica numéricamente el Teorema Central del Límite aplicado a la distribución ji-cuadrada, elige cualquier valor de los grados de libertad.
 :::
+
 ```{r}
 set.seed(123)
 
@@ -950,7 +952,7 @@ for(n in n_tcl){
         lwd = 2)
 
   cat("\n")
-  cat("====================================\n")
+  cat("\n")
   cat("n =", n, "\n")
   cat("Media(Z) =", mean(Z), "\n")
   cat("Var(Z) =", var(Z), "\n")
@@ -958,12 +960,7 @@ for(n in n_tcl){
 
 
 
-
-
-
 ```
-
-
 
 ::: {#exr-suma_normal_cuadrada}
 Mediante simulaciones numéricas, verifica la propiedad de aditividad de la distribución ji-cuadrada sumando variables aleatorias normales estándar elevadas al cuadrado. Compara los resultados con la distribución ji-cuadrada teórica.
@@ -1078,6 +1075,7 @@ grid.arrange(grobs = plots_normal, ncol = 2,
 ::: {#exr-suma_ji}
 Por medio de simulaciones numéricas, verifica la propiedad de aditividad de la distribución ji-cuadrada sumando dos variables aleatorias ji-cuadrada independientes. Compara los resultados con la distribución ji-cuadrada teórica.
 :::
+
 ```{r}
 library(ggplot2)
 
@@ -1099,6 +1097,6 @@ Z <- X + Y
 #Histograma
 datos <- data.frame(Z)
 
-ggplot(datos, aes(x = Z)) + geom_histogram(aes(y = after_stat(density)),bins = 60, fill = "skyblue",color = "black") +stat_function(fun = dchisq,args = list(df = nu_total),color = "red",linewidth = 1.2) +labs(title = paste("Suma de Chi-cuadrada(",nu1, ") + Chi-cuadrada(",nu2, ")" ),subtitle = paste( "Comparación con Chi-cuadrada(",nu_total, ") teórica" ),x = "z",y = "Densidad") +theme_minimal()
+ggplot(datos, aes(x = Z)) + geom_histogram(aes(y = after_stat(density)),bins = 60, fill = "pink",color = "black") +stat_function(fun = dchisq,args = list(df = nu_total),color = "red",linewidth = 1.2) +labs(title = paste("Suma de Chi-cuadrada(",nu1, ") + Chi-cuadrada(",nu2, ")" ),subtitle = paste( "Comparación con Chi-cuadrada(",nu_total, ") teórica" ),x = "z",y = "Densidad") +theme_minimal()
 
 ```
