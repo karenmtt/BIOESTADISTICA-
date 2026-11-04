@@ -1,5 +1,7 @@
 ---
 title: "Distribución Uniforme Continua"
+author: "Karen Beatriz Garcia Martinez"
+subtitle: "Licenciatura en Ciencias Agrogenómicas"
 lang: es
 ---
 
@@ -865,9 +867,7 @@ ggplot(df_tcl, aes(x = medias)) +
 ### Simulación de Monte Carlo
 
 Usar simulación Monte Carlo para estimar $\pi$ usando distribución uniforme.
-
 :::
-
 
 ```{r}
 N <- 100000
